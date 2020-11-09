@@ -1,0 +1,139 @@
+﻿@model ZS_SmartCheckIn.Models.Entity.Ent_Cuisine
+@{
+    ViewBag.Title = "CuisineDetails";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    List<ZS_SmartCheckIn.Models.Entity.Ent_FileUpload> FileUploadList = ViewBag.FileUploadList;
+}
+
+<div class="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <a href="#">Masters</a>
+        </li>
+        <li class="active">Cuisine Details</li>
+    </ul>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="page-header title">
+            <h1>Cuisine</h1>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="portlet portlet-basic">
+                    <div class="portlet-heading">
+                        <div class="portlet-title">
+                            <h4>Cuisine</h4>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+
+                        <address>
+                            <strong>Cuisine - @Model.CuisineName</strong>
+                            <p style="text-align:justify;">@Model.Description</p>
+
+                        </address>
+                        <address>
+                            <strong>Status</strong>
+                            <br><span class="label label-paid arrowed-in-right arrowed-in">@(Model.Status == 0 ? "Active" : "Not Active")</span>
+                        </address>
+                        <address>
+                            <strong>Dish Type:</strong>
+                            <br>@Model.CuisineTypeName
+                        </address>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="well white padding-25">
+            <div class="portlet-heading">
+                <div class="portlet-title">
+                    <h4>Images</h4>
+                </div>
+            </div>
+            <ul class="tc-gallery clearfix">
+                @foreach (var item in FileUploadList)
+                {
+                    <li>
+                        <a href="~/FileUploads/Cuisine/@item.DocName" data-rel="colorbox" class="cboxElement">
+                            <img alt="" src="~/FileUploads/Cuisine/@item.DocName" style="width:160px; height: 120px;">
+                        </a>
+                        <div class="tools tools-top">
+                            <a href="javaScript:void(0)" onclick="DeleteImagesCuisine(this);"
+                               data-assigned-id="@item.DocId" data-assigned-filenameorig="@item.DocName" data-assigned-doctype="@item.DocType">
+                                <i class="fa fa-times text-danger"></i>
+                            </a>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div style="float:right;">
+            <button type="button" class="btn btn-danger" onclick="BackCuisine();">Back</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+    function BackCuisine() {
+        location.href = "/Master/Cuisine";
+    }
+
+    function DeleteImagesCuisine(atag) {
+        if (confirm("Are You Sure You Want To Delete?")) {
+            var DocId = $(atag).data('assigned-id');
+            var DocName = $(atag).data('assigned-filenameorig');
+            var DocType = $(atag).data('assigned-doctype');
+
+            var data = new FormData();
+            data.append("DocId", DocId);
+            data.append("DocName", DocName);
+            data.append("DocType", DocType);
+
+            $.ajax({
+                type: "POST",
+                url: "/Master/DeleteUploadDetails",
+                data: data,
+                contentType: false,
+                processData: false,
+                dataType: "json",
+                beforeSend: function () { $("#loader").css("display", "block"); },
+                complete: function () { $("#loader").css("display", "none"); },
+                success: OnSuccessSaveCall,
+                error: OnErrorSaveCall
+            });
+
+            function OnSuccessSaveCall(data) {
+
+                if (data == "1") {
+                    alert('Image deleted successfully');
+                    location.href = location.href;
+                }
+                else {
+                    alert('Error occur');
+                }
+            }
+            function OnErrorSaveCall() {
+                alert('Error occur');
+            }
+        }
+    }
+
+</script>
+<script>
+    $('ul#masters').addClass('in');
+    $('ul#reportlist').removeClass('in');
+    $('ul#guestslist').removeClass('in');
+</script>

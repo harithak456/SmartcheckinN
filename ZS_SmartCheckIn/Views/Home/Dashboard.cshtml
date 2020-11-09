@@ -1,0 +1,324 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_GuestLayout.cshtml";
+    var Name = ViewBag.GuestName;
+    var Hotel = ViewBag.HotelName;
+    var BookingPort = ViewBag.BookingPortal;
+    var uploadedname = ViewBag.uploadedname;
+    var IsActive = ViewBag.IsActive;
+    var Arrival_Date = ViewBag.Arrival_Date;
+    var Completed = ViewBag.Completed;
+    var Pending = ViewBag.Pending;
+    List<ZS_SmartCheckIn.Models.Entity.Ent_Amenities> AmenitiesList = ViewBag.AmenitiesList;
+    List<ZS_SmartCheckIn.Models.Entity.Ent_NearbyPlaces> NearbyPlacesList = ViewBag.NearbyPlacesList;
+    List<ZS_SmartCheckIn.Models.Entity.Ent_Cuisine> CuisineList = ViewBag.CuisineList;
+    var c = 0;
+}
+
+<style>
+  
+
+    .modal-footer {
+        border-top: 0px;
+    }
+
+    body {
+        background-color: #000000;
+    }
+
+    /*.rotator {
+        width: 33%;
+        float: left;
+    }
+
+    #wrapper {
+        width: auto;
+        display: inline-block;
+        border: 1px solid rgb(157, 255, 0);
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+        border-bottom-left-radius: 8px;
+        background-color: rgb(64, 64, 64) 100%));      
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#404040', endColorstr='#000000');      
+        background-image: -webkit-linear-gradient(270deg, rgb(64, 64, 64) 2%, black 100%);        
+        background-image: -moz-linear-gradient(top, #404040, #000000);     
+        background-attachment: scroll;
+        background-size: auto;
+        background-position: 0% 0%;
+        background-repeat: repeat repeat;
+    }
+
+    #banner1 {
+        width: 256px;
+        height: 205px;
+        border-radius: 8px;
+        margin: 4px;
+        border: 2px solid #000000;
+    }*/
+</style>
+@*<script src="../../Scripts/ajax/dashboard.js"></script>*@
+
+<!-- BEGIN PAGE HEADING ROW -->
+<div class="row">
+    <div class="col-lg-12">
+        <!-- BEGIN BREADCRUMB -->
+        <div class="breadcrumbs">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">Home</a>
+                </li>
+                <li class="active">Dashboard </li>
+            </ul>
+
+
+        </div>
+        <!-- END BREADCRUMB -->
+
+        <div class="page-header title">
+            <!-- PAGE TITLE ROW -->
+            <h1>Dashboard </h1>
+        </div>
+
+
+
+    </div><!-- /.col-lg-12 -->
+</div><!-- /.row -->
+<!-- END PAGE HEADING ROW -->
+<div class="row">
+    <div class="col-lg-12">
+        <section id="Home">
+            <div class="row space-2x">
+                <div class="col-md-9">
+
+                    <!-- START YOUR CONTENT HERE -->
+                    <div class="jumbotron position-relative bordered white padding-2x">
+                        <h1>Hello @Name!</h1>
+                        <p>Welcome to @Hotel. We have received your booking details from @BookingPort. Kindly fill up your ID Card details and upload your ID document here.Thank You</p>
+                        @if (IsActive == 1)
+                        {
+                            if (Pending == 0)
+                            {
+                                <a class="btn btn-success btn-lg" id="btnUpload" href="/GuestData/AddGuestNew">Confirm Details</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-primary btn-lg" id="btnUpload" href="/GuestData/AddGuestNew">Upload Document Details</a>
+                            }
+
+                            if (uploadedname != "")
+                            {
+                                <span style="font-size:80%">Uploaded DOC :<a style="color:dodgerblue" href="/GuestData/AddGuestNew">@uploadedname</a></span>
+
+                            }
+                        }
+                        else
+                        {
+                            <span style="color:forestgreen;font-size:90%">All Id Documents are Uploaded Successfully !</span><br />
+                            <span style="font-size:90%">Your Checkin Date: @Arrival_Date</span>
+                        }
+                        @if (Pending != 0 && Completed != 0 && IsActive == 1)
+                        {
+                            <marquee>   <span style="color:red;font-size:80%">@Completed Documents Submitted..Please Upload @Pending more Guest Details</span></marquee>
+                        }
+                        else if (Pending == 0 && IsActive == 1)
+                        {
+
+                            <br /><blink style="float:right;color:red;font-size:80%">All Documents Uploaded Succesfully..Please Confirm Details</blink>
+                        }
+                        <div class="ribbon-wrapper"><div class="ribbon bg-primary">New</div></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <img src="../../assets/images/hotel.png">
+                </div>
+            </div>
+        </section>
+
+        <section id="amenities" style="background-color:white; padding:5px">
+            <div class="row space-2x">
+                <div class="page-header no-padding-bottom">
+
+                    <h3>&nbsp;Services & Amenities</h3>
+                </div>
+                <div class="col-lg-12">
+                    <div class="col-lg-7">
+
+                        <!-- Gallery Style 1 -->
+                        <div class="well white">
+
+                            <ul class="tc-gallery clearfix">
+                                @foreach (var item in AmenitiesList)
+                                {
+                                    <li>
+                                        <a href="../../FileUploads/Amenities/@item.DocName" data-rel="colorbox">
+                                            <img alt="" src="../../FileUploads/Amenities/@item.DocName" style="width:160px; height: 120px;" />
+                                        </a>
+
+                                        <div class="tags">
+                                            <span class="label-holder">
+                                                <span class="label label-primary">@item.AmenitiesName</span>
+                                            </span>
+                                        </div>
+
+                                    </li>
+                                }
+                               
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+
+                        <div class="portlet portlet-basic">
+                            <div class="portlet-heading">
+                                <div class="portlet-title">
+                                    <h4><i class="fa fa-star"></i> Key Amenities</h4>
+                                </div>
+                            </div>
+                            <div class="portlet-body" style="height:280px;overflow-y:hidden">
+                                <div class="col-lg-6">
+                                    <address style="margin-bottom: 10px;font-size: 13px;">
+                                        <i class="fa fa-wifi"></i> Free Internet
+
+                                    </address>
+                                    <address style="margin-bottom: 10px;font-size: 13px;">
+                                        <i class="fa fa-wifi"></i> Swimming Pool
+                                    </address>
+                                    <address style="margin-bottom: 10px;font-size: 13px;">
+                                        <i class="fa fa-wifi"></i> Free Breakfast
+
+                                    </address>
+                                    <address style="margin-bottom: 10px;font-size: 13px;">
+                                        <i class="fa fa-wifi"></i> Free Welcome Drink
+                                    </address>
+                                    <address style="margin-bottom: 10px;font-size: 13px;">
+                                        <i class="fa fa-wifi"></i> Fitness center
+
+                                    </address>
+                                    <address style="margin-bottom: 10px;font-size: 13px;">
+                                        <i class="fa fa-wifi"></i> Newspaper in lobby
+                                    </address>
+                                    <address style="margin-bottom: 10px;font-size: 13px;">
+                                        <i class="fa fa-wifi"></i> Safe deposit boxes, front desk
+                                    </address>
+                                </div>
+                                <div class="col-lg-6">
+                                    <address style="margin-bottom: 10px;font-size: 13px;">
+                                        <i class="fa fa-wifi"></i> Air Conditioning
+
+                                    </address>
+                                    <address style="margin-bottom: 10px;font-size: 13px;">
+                                        <i class="fa fa-wifi"></i> Conference Room
+                                    </address>
+                                    <address style="margin-bottom: 10px;font-size: 13px;">
+                                        <i class="fa fa-wifi"></i> Concierge desk
+
+                                    </address>
+                                    <address style="margin-bottom: 10px;font-size: 13px;">
+                                        <i class="fa fa-wifi"></i> All public areas non-smoking
+                                    </address>
+                                    <address style="margin-bottom: 10px;font-size: 13px;">
+                                        <i class="fa fa-wifi"></i> Room Service,24x7
+
+                                    </address>
+                                    <address style="margin-bottom: 10px;font-size: 13px;">
+                                        <i class="fa fa-wifi"></i> Laundry on-site
+                                    </address>
+                                    <address style="margin-bottom: 10px;font-size: 13px;">
+                                        <i class="fa fa-wifi"></i> Buffet Lunch/Breakfast
+                                    </address>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+        </section>
+
+        <section id="attractions">
+            <div class="row">
+                <div class="page-header no-padding-bottom">
+
+                    <h3>Nearby Places to Visit <small>&nbsp; Explore Now - All <b>@NearbyPlacesList.Count</b> Local Attractions</small></h3>
+                </div>
+                @foreach (var item in NearbyPlacesList)
+                {
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="pricing-table-2">
+                            <a href="#" class="product-image">
+                                <img class="img-responsive" src="../../FileUploads/NearbyPlaces/@item.DocName" alt="">
+                                <span class="pricing">@item.Distance km</span>
+                            </a>
+                            <div class="details">
+                                <div class="actions">
+                                    <a href="/Home/NearbyPlacesView?id=@item.NearbyPlacesId" class="btn btn-white btn-round">
+                                        <i class="fa fa-search-plus icon-only"></i>
+                                    </a>
+                                </div>
+                                <h4>@item.NearbyPlacesName</h4>
+                                <a>@item.imageCount images inside</a>
+
+                                <div class="intents">
+                                    <span class="fa fa-star text-primary"></span>
+                                    <span class="fa fa-star text-primary"></span>
+                                    <span class="fa fa-star-o"></span>
+                                    <span class="fa fa-star-o"></span>
+                                    <span class="fa fa-star-o"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>            
+                }
+
+            </div>
+
+         
+        </section>
+
+        <section id="cuisines">
+            <div class="col-lg-12">
+
+
+
+                <div class="page-header no-padding-bottom">
+                    <h3>Our Special Cuisines <small>Taste it!!</small></h3>
+                </div>
+
+                <!--Pricing Tables 4-->
+                <div class="row">
+                    @foreach (var item in CuisineList)
+                    {
+                        if (c == 4)
+                        {
+                            break;
+                        }
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="pricing-table-3" style="background-image:url(../../FileUploads/Cuisine/@item.DocName); height:455px;">
+                                <span><img src="../../assets/images/veg.png" width="20%" style="float:right" /></span>
+                                <h3 class="plan-title" style="color:white; background-color:darkred; padding:5px;margin-top: 381px;">@item.CuisineName</h3>
+                            </div>
+                        </div>
+                        c++;
+                    }                  
+                </div>
+                <button type="button" class="btn btn-success" onclick="ViewMoreDish()" style="float:right">View more - Dishes</button>
+                <!-- END YOUR CONTENT HERE -->
+
+            </div>
+
+        </section>
+
+    </div>
+    </div>
+
+<script>
+    function ViewMoreDish()
+     {
+        location.href = "/Home/MoreCuisine";
+    }
+</script>

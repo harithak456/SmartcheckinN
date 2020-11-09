@@ -1,0 +1,191 @@
+﻿@model ZS_SmartCheckIn.Models.Entity.Ent_Cuisine
+@{
+    ViewBag.Title = "Cuisine";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    List<ZS_SmartCheckIn.Models.Entity.Ent_Cuisine> CuisineList = ViewBag.CuisineList;
+    List<ZS_SmartCheckIn.Models.Entity.Ent_CuisineType> CuisineTypeList = ViewBag.CuisineTypeList;
+    int i = 0;
+}
+<script src="~/Scripts/ajax/cuisine.js"></script>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="breadcrumbs fixed">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">Home</a>
+                </li>
+
+                <li class="active">Manage Cuisine</li>
+            </ul>
+
+        </div>
+        <div class="page-header title">
+            <h1>Manage Cuisine <span class="sub-title">Cuisine listing</span></h1>
+        </div>
+    </div>
+</div>
+<div class="messagebox"></div>
+<div class="row space-2x">
+    <div class="col-lg-12">
+
+        <div class="portlet">
+            <div class="portlet-heading dark">
+                <div class="portlet-title">
+                    <h4>Cuisine</h4>
+                </div>
+                <div class="portlet-widgets">
+                    <a href="#" class="tooltip-primary" id="btnAddNewCuisine" data-placement="left" data-rel="tooltip" title="" data-original-title="Add New" data-toggle="modal" data-target="#add-Cuisine"><i class="fa fa-plus"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div id="basic" class="panel-collapse collapse in">
+                <div class="portlet-body no-padding">
+                    <table class="table table-bordered table-hover tc-table">
+                        <thead>
+                            <tr>
+                                <th class="col-small center hide"><label><input type="checkbox" class="tc"><span class="labels"></span></label></th>
+                                <th>Sl.No</th>
+                                <th class="hidden-xs">Item</th>
+                                <th class="hidden-xs">Status</th>
+                                <th class="col-medium center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in CuisineList)
+                            {
+                                i++;
+                                <tr>
+                                    <td class="col-small center hide"><label><input type="checkbox" class="tc"><span class="labels"></span></label></td>
+                                    <td>
+                                        @i
+                                        <ul class="table-mobile-ul visible-xs list-unstyled">
+                                            <li>@item.CuisineName</li>
+                                            <li><span class="label label-paid arrowed-in-right arrowed-in">Active</span></li>
+                                        </ul>
+                                    </td>
+                                    <td class="hidden-xs"><a href="/Master/CuisineDetails?id=@item.CuisineId">@item.CuisineName</a></td>
+                                    <td class="hidden-xs"><span class="label label-paid arrowed-in-right arrowed-in">@(item.Status == 0 ? "Active" : "Not Active")</span></td>
+                                    <td class="col-medium center">
+                                        <div class="btn-group btn-group-xs ">
+                                            <a href="/Master/Cuisine?id=@item.CuisineId" class="btn btn-inverse"><i class="fa fa-pencil icon-only"></i></a>
+                                            <a href="" class="btn btn-danger btnCuisineDelete" data-assigned-id="@item.CuisineId"
+                                               data-assigned-fileid="@item.UploadFileID" data-assigned-filenameorig="@item.DocName"><i class="fa fa-times icon-only"></i></a>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-scroll" id="add-Cuisine" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close btnClosePopup" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-plus-circle"></i> Add Cuisine</h4>
+            </div>
+            <div class="modal-body padding-2x">
+                <form role="form" method="post">
+                    <input type="hidden" id="CuisineId" value="@Model.CuisineId" />
+                    <div class="form-group">
+                        <label>Item Name</label>
+                        <input type="text" class="form-control txtCuisineName" value="@Model.CuisineName">
+                        <span id="validCuisineName" class="requiredv" style="color:red"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <div class="wysiwyg-toolbar btn-toolbar editor-style2 text-center">
+                            <div class="btn-group">
+                                <a class="btn btn-sm btn-default" data-edit="bold" title="" data-original-title="Bold (Ctrl/Cmd+B)"><i class="fa fa-bold"></i></a>
+                                <a class="btn btn-sm btn-default" data-edit="italic" title="" data-original-title="Italic (Ctrl/Cmd+I)"><i class="fa fa-italic"></i></a>
+                                <a class="btn btn-sm btn-default" data-edit="strikethrough" title="" data-original-title="Strikethrough"><i class="fa fa-strikethrough"></i></a>
+                                <a class="btn btn-sm btn-default" data-edit="underline" title="" data-original-title="Underline"><i class="fa fa-underline"></i></a>
+                            </div>
+                            <div class="btn-group">
+                                <a class="btn btn-sm btn-default" data-edit="justifyleft" title="" data-original-title="Align Left (Ctrl/Cmd+L)"><i class="fa fa-align-left"></i></a>
+                                <a class="btn btn-sm btn-default" data-edit="justifycenter" title="" data-original-title="Center (Ctrl/Cmd+E)"><i class="fa fa-align-center"></i></a>
+                                <a class="btn btn-sm btn-default" data-edit="justifyright" title="" data-original-title="Align Right (Ctrl/Cmd+R)"><i class="fa fa-align-right"></i></a>
+                            </div>
+                            <div class="btn-group">
+                                <div class="btn-group">
+                                    <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Hyperlink"><i class="fa fa-link"></i></a>
+                                    <div class="dropdown-menu dropdown-caret dropdown-menu-right">
+                                        <div class="input-group">
+                                            <input class="form-control" placeholder="URL" type="text" data-edit="createLink">
+                                            <span class="input-group-btn"><button class="btn btn-primary" type="button">Add</button></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a class="btn btn-sm btn-default" data-edit="unlink" title="" data-original-title="Remove Hyperlink"><i class="fa fa-chain-broken"></i></a>
+                            </div>
+                            <div class="btn-group">
+                                <div class="btn-group">
+                                    <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Insert picture"><i class="fa fa-picture-o"></i></a>
+                                    <div class="dropdown-menu dropdown-caret dropdown-menu-right">
+                                        <div class="input-group">
+                                            <input class="form-control" placeholder="Image URL" type="text" data-edit="insertImage">
+                                            <span class="input-group-btn"><button class="btn btn-primary" type="button">Insert</button></span>
+                                        </div>
+                                        <label class="center block no-margin-bottom">
+                                            <button class="btn btn-xs btn-default wysiwyg-choose-file" type="button"><i class="fa fa-file"></i>Choose …</button>
+                                            <input type="file" data-edit="insertImage">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="wysiwyg-editor txtDescription" id="desc" style="height: 150px;" contenteditable="true">@Model.Description</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Cuisine type</label>
+                        <select class="form-control ddlCuisinetype">
+                            @foreach (var item in CuisineTypeList)
+                            {
+                                <option value="@item.CuisineTypeId" @(Model.CuisineType == item.CuisineTypeId ? "selected" : "")>@item.CuisineTypeName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Cuisine Image</label>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <span class="btn btn-file">
+                                    Browse <input type="file" id="upCuisineImg" name="upCuisineImg" value="upCuisineImg" accept="image/*">
+                                </span>
+                            </span>
+                            <input type="text" class="form-control txtDocName" readonly="" value="">
+                            <input type="hidden" id="UploadFileID" value="@Model.UploadFileID" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select class="form-control ddlStatus">
+                            <option value="0" @(Model.Status == 0 ? "selected" : "")>Active</option>
+                            <option value="1" @(Model.Status == 1 ? "selected" : "")>Not Active</option>
+                        </select>
+                    </div>
+                    <div class="form-actions no-padding-bottom">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary btnAddCuisine">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $('ul#masters').addClass('in');
+    $('ul#reportlist').removeClass('in');
+    $('ul#guestslist').removeClass('in');
+</script>

@@ -1,0 +1,287 @@
+﻿@model ZS_SmartCheckIn.Models.Entity.Ent_Guest
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    form .error {
+        color: #ff0000;
+    }
+</style>
+<script src="../../Scripts/ajax/register.js"></script>
+<!-- BEGIN PAGE HEADING ROW -->
+<div class="row">
+    <div class="col-lg-12">
+        <!-- BEGIN BREADCRUMB -->
+        <div class="breadcrumbs">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">Add Guest</a>
+                </li>
+
+                <li class="active">Profile</li>
+            </ul>
+        </div>
+        <!-- END BREADCRUMB -->
+        <div class="page-header title">
+            <!-- PAGE TITLE ROW -->
+            <h1>Add Guest </h1>
+        </div>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<!-- END PAGE HEADING ROW -->
+<div class="messagebox"></div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="portlet">
+            <div class="portlet-heading dark">
+                <div class="portlet-title">
+                    <h4>Guest Profile</h4>
+                </div>
+               
+                <div class="clearfix"></div>
+            </div>
+            <div id="ft-3" class="panel-collapse collapse in">
+                <div class="portlet-body">
+                    <form class="form-horizontal formValid" name="registration" role="form" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <input type="hidden" id="customercode" value="@Model.Customer_Code" />
+                            <input type="hidden" id="frequentVisitor" value="0" />
+                            <input type="hidden" id="password" value="" />
+                            <label class="col-sm-3 control-label">First Name<span style="color:red">*</span></label>
+                            <div class="col-sm-4">
+                                <input type="text" name="FirstName" id="FirstName" value="@Model.Guest_Firstname" autocomplete="off" class="form-control " placeholder="Enter First Name">
+                            </div>
+                            <div class="col-sm-4">  <span id="validFName" class="requiredv" style="color:red"></span></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Last Name<span style="color:red">*</span></label>
+                            <div class="col-sm-4">
+                                <input type="text" name="LastName" id="LastName" autocomplete="off" value="@Model.Guest_Lastname"class="form-control" placeholder="Enter Last Name">
+                            </div>
+                            <div class="col-sm-4">  <span id="validLName" class="requiredv" style="color:red"></span></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Email<span style="color:red">*</span></label>
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                                    <input type="email" name="Email" id="Email"value="@Model.Guest_Email"  onfocusout="myFunction()" autocomplete="off"  class="form-control" placeholder="Email">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">  <span id="validMail" class="requiredv" style="color:red"></span></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Mobile No:<span style="color:red">*</span></label>
+                            <div class="col-sm-4">
+                                <input type="text" name="MobileNo" id="MobileNo" value="@Model.Guest_MobileNo" autocomplete="off"  class="form-control" placeholder="Enter Mobile Number">
+                            </div>
+                            <div class="col-sm-4">  <span id="validMobile" class="requiredv" style="color:red"></span></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Phone No:</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="PhoneNo" id="PhoneNo"  value="@Model.Guest_PhoneNo" autocomplete="off" class="form-control" placeholder="Enter Phone Number">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">User Name:<span style="color:red">*</span></label>
+                            <div class="col-sm-4">
+                                <input type="text" name="Username" id="UserName" value="@Model.Guest_Username" autocomplete="off" class="form-control" placeholder="Enter Username">
+                            </div>
+                            <div class="col-sm-4">  <span id="validUser" class="requiredv" style="color:red"></span></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">No.Of Guest Accompanied:</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="GuestAccompany" id="GuestAccompany" autocomplete="off" value="@Model.Guest_Accompany" class="form-control" placeholder="Enter No.Of Guests Accompanied">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Arrival Date & Time:<span style="color:red">*</span></label>
+                            <div class="col-sm-2">
+                                <div class="input-group date form_date" style="width:180px" data-date="" data-date-format="dd MM yyyy" data-link-field="arrivaldate" data-link-format="yyyy-mm-dd">
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-calendar"></i>
+                                    </span>
+                                    <input class="form-control" onchange="TDate()" id="arrivaldate"/>
+                                </div>
+                                @*<input type="hidden" id="arrivaldate" value="@Model.Arrival_Date.ToString("dd/MM/yyyy")"/>*@                             
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="input-group date form_time" data-date="" data-date-format="hh:ii" data-link-field="dtp_input3" data-link-format="hh:ii">
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-time"></i>
+                                    </span>
+                                    <input class="form-control"  id="arrivaltime" onchange="TDate()" >
+                                </div>
+                            </div>
+                            <div class="col-sm-4"> 
+                            <span id="validArrival" class="requiredv" style="color:red"></span></div>                           
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Booking Portal:<span style="color:red">*</span></label>
+                            <div class="col-sm-4">
+                                <input type="text" name="portal" id="portal" value="@Model.Booking_Portal" autocomplete="off" class="input-xlarge form-control" placeholder="Enter Booking Portal">
+                            </div>
+                            <div class="col-sm-4">  <span id="validPortal" class="requiredv" style="color:red"></span></div>
+                          
+                        </div>
+                        @if (Model.Guest_ID == 0)
+                        {
+                            <div class="form-group">
+                                <label class="col-sm-3 "></label>
+                                <div class="col-sm-4">
+                                    <label>
+                                        <input type="checkbox" id="sendmail" class="tc tc-red">
+                                        <span class="labels"> SEND MAIL</span>
+                                    </label>
+
+                                    <label>
+                                        <input type="checkbox" id="sendsms" class="tc tc-red">
+                                        <span class="labels"> SEND SMS</span>
+                                    </label>
+                                </div>
+                            </div>
+                        }
+                        <div class="form-actions">
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <input type="button"  id="btn-loading" data-loading-text="Please wait..." class="btn btn-info btnAddGuest" value="Submit" />
+                                    @*<button type="submit" class="btn btn-info btnAddGuest">Submit</button>*@
+                                    <input type="submit" class="btn btn-default " value="Cancel" />
+                                    @if (Model.Guest_ID != 0)
+                                    {
+                                        <button type="button" class="btn btn-success btnSendMail"><i class="fa fa-trash-o"></i>Send Mail</button>
+                                        <button type="button" class="btn btn-warning btnSendSms"><i class="fa fa-trash-o"></i>Send SMS</button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<script>
+    function TDate() {
+        $("#validArrival").html("");
+        var UserDate = document.getElementById("arrivaldate").value;
+
+        var today = new Date();     
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1;
+
+        var yyyy = today.getFullYear();
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+        var ToDate = yyyy + '-' + mm + '-' + dd ;
+       
+        if (UserDate < ToDate) {
+            $("#validArrival").html("Select a Valid Date.");
+            return false;
+        }
+        else if (UserDate == ToDate) {
+            timeParts = document.getElementById("arrivaltime").value.split(':');
+            if (today.getHours() >= timeParts[0]) {
+                $("#validArrival").html("Select a Valid Time.");
+                return false;
+            }
+        }
+        return true;
+    }
+    
+
+    function myFunction() {
+        var customercode = $("#customercode").val();
+        if (customercode == '') {    
+                var mail = $('#Email').val();
+                $.ajax({
+                    type: "POST",
+                    url: "/Guest/SelectFrequentGuest",
+                    data: "{'Guest_Email':'" + mail + "'}",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data != "") {
+                            if (data.Guest_Username != '' && data.Guest_Username != null) {
+                                if (confirm("This Mail ID Already Exist...Do you want to add a New Visit?")) {
+                                    document.getElementById('UserName').value = data.Guest_Username;
+                                    $('#UserName').prop("disabled", true);
+
+                                    document.getElementById('password').value = data.Guest_Password;
+                                    document.getElementById('FirstName').value = data.Guest_Firstname;
+                                    document.getElementById('LastName').value = data.Guest_Lastname;
+                                    document.getElementById('PhoneNo').value = data.Guest_PhoneNo;
+                                    document.getElementById('MobileNo').value = data.Guest_MobileNo;
+                                    $('#frequentVisitor').val('1');
+                                }
+                                else {
+                                    document.getElementById('Email').value = '';
+                                    document.getElementById('UserName').value = '';
+                                    $('#UserName').prop("disabled", false);
+                                    document.getElementById('password').value = '';
+                                    document.getElementById('PhoneNo').value = '';
+                                    document.getElementById('MobileNo').value = '';
+                                    $('#frequentVisitor').val('0');
+                                }
+                            }
+                            else {
+                                $('#UserName').prop("disabled", false);
+                                $('#frequentVisitor').val('0');
+                                document.getElementById('password').value = '';
+                            }
+                        }
+                        else {                         
+                            $('#UserName').prop("disabled", false);
+                            $('#frequentVisitor').val('0');
+                            document.getElementById('password').value = ''; 
+                        }
+                    },
+                    error: function () { }
+                });
+           
+        }
+    }
+
+    $(document).ready(function () {
+        var cust = $('#customercode').val();
+        if (cust == '' || cust == null) {
+            var now = new Date;
+            var day = ('0' + now.getDate()).slice(-2);
+            var month = ('0' + (now.getMonth() + 1)).slice(-2);
+            var today = now.getFullYear() + '-' + (month) + '-' + (day);
+            $('#arrivaldate').val(today);
+            var time = now.getHours() + ':' + now.getMinutes();
+            $('#arrivaltime').val(time);
+
+
+            $('ul#masters').removeClass('in');
+            $('ul#guestslist').addClass('in');
+            $('ul#reportlist').removeClass('in');
+        }
+        else
+        {
+            $('#arrivaltime').val('@Model.Arrival_Time');
+            $('#arrivaldate').val('@Model.Arrival_Date.ToString("dd/MM/yyyy")');
+
+
+            $('ul#masters').removeClass('in');
+            $('ul#guestslist').removeClass('in');
+            $('ul#reportlist').removeClass('in');
+        }
+      
+      
+    });
+</script>

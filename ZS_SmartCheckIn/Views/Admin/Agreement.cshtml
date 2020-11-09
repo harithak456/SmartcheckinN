@@ -1,0 +1,220 @@
+﻿
+@{
+    ViewBag.Title = "Agreement";
+    var CustomerCode = ViewBag.CustomerCode;
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+     <meta charset="utf-8">
+    <title>Manage Products Listing - eKoders Responsive Admin Theme</title>
+	
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+     <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+ 
+  <script src="../../Scripts/jquery-3.3.1.min.js"></script>  
+</head>
+<body>
+    <form id="form1" runat="server">
+   <div id="wrapper">
+       <div id="main-container">
+
+
+           <div class="col-md-10 col-md-offset-1">
+               <div class="well white padding-25">
+                   <div class="pull-left">
+                       <h1 class="bigger-250"><i class="fa fa-leaf text-primary"></i> ABC Hotel</h1>
+                   </div>
+
+                   <div class="clearfix"></div>
+
+                   <div class="hr hr-double hr-dotted hr-12"></div>
+                   <input type="hidden" id="code" value="@ViewBag.CustomerCode" />
+
+
+
+                   <div class="row">
+                       Terms of Service
+                       The Terms of Service Agreement is mainly used for legal
+                       purposes by companies which provide software or services,
+                       such as web browsers, e-commerce, web search engines,
+                       social media, and transport services.
+                       A leg'timate terms-of-service agreement •s legal y binding and
+                       may be subject to change-Companies can enforce the terms
+                       by refusing service Customers can enforce by filing a lawsuit
+                       or arbitration case they can show they were actual y harmed
+                       by a breach of the terms. There is a heightened risk of data
+                       going astray during corporate changes, including mergers,
+                       divestitures buyouts downsizing, etc., when data can be
+                       transferred The Of Service Agreernent is
+                       mainly used for egal purposes by companies which provide
+                       software or services, such as web browsers, e-commerce,
+                       web search engines, social media, and transport services.
+                   </div>
+
+                   <div class="space-16"></div>
+                   <div class="well white">
+
+                       <section style="margin-top:0px;">
+                           <div class="row">
+                               <div class="two-thirds column">
+                                   <div id="sketchpad" style="height:80px"></div>
+
+                               </div>
+                               <div class="toolbox one-third column" style="margin-left:1%">
+                                   <div class="row">
+                                       <button class="u-full-width no-margin" id="clear" style="margin-top: 15px!important;margin-left: 8px!important">Clear</button>
+
+                                   </div>
+                               </div>
+                           </div>
+                       </section>
+                   </div>
+
+                   <div class="row">
+                       <p>
+                           <input type="checkbox" id="chkAgree" name="terms"> I accept the <u>Terms and Conditions</u>
+                           <input type="button" style="float:right" class="btn btn-info btnAddSignature" value="Submit" />
+                       
+                       </p>  
+                      
+
+                       <div class="well light text-center">
+                           Thank you for choosing Us. We believe you will be satisfied by our services.
+
+                       </div>
+                   </div>
+               </div>
+           </div>         
+           <!-- END MAIN PAGE CONTENT -->
+       </div>  
+	</div> 
+        </form>			 	
+   <!-- Scripts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script src="../../dist/sketchpad.js"></script>
+  <script>
+      var el = document.getElementById('sketchpad');
+      var pad = new Sketchpad(el);
+      pad.setCanvasSize(870, 80);
+      
+      // setLineColor
+      //function setLineColor(e) {
+      //    var color = e.target.value;
+      //    if (!color.startsWith('#')) {
+      //        color = '#' + color;
+      //    }
+      //    pad.setLineColor(color);
+      //}
+      //document.getElementById('line-color-input').oninput = setLineColor;
+
+      // setLineSize
+      //function setLineSize(e) {
+      //    var size = e.target.value;
+      //    pad.setLineSize(size);
+      //}
+      //document.getElementById('line-size-input').oninput = setLineSize;
+          
+      // clear
+      function clear() {
+          pad.clear();
+      }
+      document.getElementById('clear').onclick = clear;
+
+      function uploadJson() {
+          document.getElementById('uploadJsonInput').click();
+      }
+      document.getElementById('uploadJson').addEventListener('click', uploadJson, false);
+
+      function changeJson(e, a) {
+        const files = e.target.files;
+          if (files.length == 0) return;
+
+        const reader = new FileReader();
+          reader.addEventListener('load', (event) => {
+              try {
+                  var data = JSON.parse(event.target.result);
+      } catch (e) {
+          alert("Unable to read JSON file");
+          throw e;
+      }
+      pad.loadJSON(data);
+      });
+      reader.readAsText(files[0]);
+      }
+      document.getElementById('uploadJsonInput').addEventListener('change', changeJson, false);
+
+      function downloadJson() {
+          var data = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(pad.toJSON()));
+          this.href = data;
+      }
+      document.getElementById('downloadJson').addEventListener('click', downloadJson, false);
+
+      function downloadPng() {
+          var data = pad.canvas.toDataURL("image/png");
+          this.href = data;
+      }
+      document.getElementById('downloadPng').addEventListener('click', downloadPng, false);
+
+      // resize
+      window.onresize = function (e) {
+          pad.resize(el.offsetWidth);
+      }
+  </script>
+  </body>
+</html>
+<script>
+    $(document).ready(function () {
+
+        $('.btnAddSignature').click(function () {
+
+            var chk = $('input[id="chkAgree"]:checked').length > 0;
+
+            if (chk == true) {
+
+                var CustomerCode = $('#code').val();
+
+
+    var file = pad.canvas.toDataURL("image/png");
+                this.href = file;
+    //            var files = file;
+    //            var data = new FormData();
+    //            data.append("Customer_Code", CustomerCode);
+    //data.append("Guest_Signature", files[0]);
+    //$.ajax({
+    //    type: "POST",
+    //    url: "/Admin/SaveGuestSignature",
+    //    data: data,
+    //    contentType: false,
+    //    processData: false,
+    //    dataType: "json",
+    //    //beforeSend: function () { $("#loader").css("display", "block"); },
+    //    //complete: function () { $("#loader").css("display", "none"); },
+    //    success: OnSuccessSaveCall,
+    //    error: OnErrorSaveCall
+    //});
+    //function OnSuccessSaveCall(data) {
+    //    if (data > 0) {
+    //        alert('success');
+    //    }
+    //    else {
+    //        alert('Failed');
+    //    }
+    //}
+    //function OnErrorSaveCall() {
+    //    alert('Failed');
+    //}
+}
+});
+
+});
+
+</script>
+

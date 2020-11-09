@@ -1,0 +1,24 @@
+{
+  "manifest_version": 2,
+  "name": "IntelliLabs",
+  "description": "This extension is for Frro auto filler",
+  "version": "1.0",
+  "background": {
+    "scripts": [ "background.js" ],
+    "persistent": false
+  },
+  "browser_action": {
+    "default_icon": "Images/Zi.png",
+    "default_popup": "popup.html"
+  },
+  "externally_connectable": {
+    "matches": [ "*://*.indianfrro.gov.in/*" ]
+  },
+  "content_scripts": [
+    {
+      "matches": [ "http://*.indianfrro.gov.in/*" ],
+      "js": [ "myjs.js" ]
+    }
+  ],
+  "permissions": [ "tabs", "cookies", "storage", "<all_urls>" ]
+}  

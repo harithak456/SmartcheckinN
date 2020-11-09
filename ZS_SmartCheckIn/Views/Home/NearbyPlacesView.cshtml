@@ -1,0 +1,155 @@
+﻿@model ZS_SmartCheckIn.Models.Entity.Ent_NearbyPlaces
+@{
+             
+                ViewBag.Title = "NearbyPlacesView";
+                Layout = "~/Views/Shared/_GuestLayout.cshtml";
+                List<ZS_SmartCheckIn.Models.Entity.Ent_FileUpload> FileUploadList = ViewBag.FileUploadList;
+}
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="breadcrumbs fixed">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">Home</a>
+                </li>
+                <li class="active">NearBy Places</li>
+            </ul>
+        </div>
+
+        <div class="page-header title">
+            <h1>NearBy Places</h1>
+        </div>
+
+        <div class="qs-layout-menu">
+            <div class="btn btn-gray qs-setting-btn" id="qs-setting-btn">
+                <i class="fa fa-cog bigger-150 icon-only"></i>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="portlet portlet-basic">
+                    <div class="portlet-heading">
+                        <div class="portlet-title">
+                            <h4>NearBy Places</h4>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <address>
+                            <strong>@Model.NearbyPlacesName</strong>
+                            <p style="text-align:justify;">@Model.Description</p>
+
+                        </address>
+                        <address>
+                            <strong>Status</strong>
+                            <br><span class="label label-paid arrowed-in-right arrowed-in">@(Model.Status == 0 ? "Active" : "Not Active")</span>
+                        </address>
+                        <address>
+                            Distance from Hotel: @Model.Distance
+                        </address>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="portlet portlet-basic">
+                    <div class="portlet-heading">
+                        <div class="portlet-title">
+                            <h4>Location Map</h4>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="row">
+                            @Html.Raw(HttpUtility.HtmlDecode(@Model.LocationMap));
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="well white padding-25">
+            <div class="portlet-heading">
+                <div class="portlet-title">
+                    <h4>Images</h4>
+                </div>
+            </div>
+            <ul class="tc-gallery clearfix">
+                @foreach (var item in FileUploadList)
+                {
+                    <li>
+                        <a href="~/FileUploads/NearbyPlaces/@item.DocName" data-rel="colorbox" class="cboxElement">
+                            <img alt="" src="~/FileUploads/NearbyPlaces/@item.DocName" style="width:160px; height: 120px;">
+                        </a>
+                        <div class="tools tools-top">
+                            <a href="javaScript:void(0)" onclick="DeleteImagesNearbyPlaces(this);" id="btnDeleteNearbyPlaces"
+                               data-assigned-id="@item.DocId" data-assigned-filenameorig="@item.DocName" data-assigned-doctype="@item.DocType">
+                                <i class="fa fa-times text-danger"></i>
+                            </a>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div style="float:right;">
+            <button type="button" class="btn btn-danger" onclick="BackNearbyPlaces();">Back</button>
+        </div>
+    </div>
+
+</div>
+<script>
+
+    function BackNearbyPlaces() {
+        location.href = "/Home/Dashboard";
+    }
+
+    function DeleteImagesNearbyPlaces(atag) {
+        if (confirm("Are You Sure You Want To Delete?")) {
+            var DocId = $(atag).data('assigned-id');
+            var DocName = $(atag).data('assigned-filenameorig');
+            var DocType = $(atag).data('assigned-doctype');
+
+            var data = new FormData();
+            data.append("DocId", DocId);
+            data.append("DocName", DocName);
+            data.append("DocType", DocType);
+
+            $.ajax({
+                type: "POST",
+                url: "/Master/DeleteUploadDetails",
+                data: data,
+                contentType: false,
+                processData: false,
+                dataType: "json",
+                beforeSend: function () { $("#loader").css("display", "block"); },
+                complete: function () { $("#loader").css("display", "none"); },
+                success: OnSuccessSaveCall,
+                error: OnErrorSaveCall
+            });
+
+            function OnSuccessSaveCall(data) {
+
+                if (data == "1") {
+                    alert('Image deleted successfully');
+                    location.href = location.href;
+                }
+                else {
+                    alert('Error occur');
+                }
+            }
+            function OnErrorSaveCall() {
+                alert('Error occur');
+            }
+        }
+    }
+
+</script>
+

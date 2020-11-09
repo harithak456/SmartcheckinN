@@ -1,0 +1,472 @@
+﻿@{
+
+    HttpCookie C_UserID = Request.Cookies["User_ID"];
+    string User_ID = C_UserID != null ? C_UserID.Value.Split('=')[1] : "";
+    if (User_ID == "")
+    {
+        Response.Redirect("/User/Login");
+    }
+
+    HttpCookie C_UserGroup = Request.Cookies["User_Type"];
+    var UserType = C_UserGroup != null ? C_UserGroup.Value.Split('=')[1] : "";
+    if (UserType == "Guest")
+    {
+        Response.Redirect("/User/GuestLogin");
+    }
+
+    HttpCookie C_User_Name = Request.Cookies["User_Name"];
+    var User_Name = C_User_Name != null ? C_User_Name.Value.Split('=')[1] : "";
+
+
+}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ZEROSNAP SMART CHECK-IN</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/fonts.css">
+    <link rel="stylesheet" href="../../assets/font-awesome/css/font-awesome.min.css">
+
+    <!-- PAGE LEVEL PLUGINS STYLES -->
+    <link href="../../assets/css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
+    <link href="../../assets/css/plugins/morris/morris.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/plugins/bootstrap-datepicker/datepicker.css">
+    <link rel="stylesheet" href="../../assets/css/plugins/footable/footable.min.css">
+    <link rel="stylesheet" href="../../assets/css/plugins/datetime/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="../../assets/css/plugins/bootstrap-datepicker/datepicker.css">
+    <link rel="stylesheet" href="../../assets/css/plugins/colorBox/colorbox.css">
+    <!-- REQUIRE FOR SPEECH COMMANDS -->
+    <link rel="stylesheet" type="text/css" href="../../assets/css/plugins/gritter/jquery.gritter.css" />
+
+    <!-- Tc core CSS -->
+    <link id="qstyle" rel="stylesheet" href="../../assets/css/themes/style.css">
+
+    <!-- Add custom CSS here -->
+    <link rel="stylesheet" href="../../assets/css/only-for-demos.css">
+    <link href="../../assets/css/plugins/jqueryui/jquery-ui.min.css" rel="stylesheet" />
+
+    <script src="../../Scripts/jquery-3.3.1.min.js"></script>
+    <script src="../../assets/js/plugins/flot/jquery.js"></script>
+    <script src="../../Scripts/ajax/Login.js"></script>
+
+    <style>
+        .modal-footer {
+            border-top: 0px;
+        }
+        .red {
+            color: red
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="main-container">
+            <!-- BEGIN TOP NAVIGATION -->
+            <nav class="navbar-top" role="navigation">
+                <!-- BEGIN BRAND HEADING -->
+                @*<div class="navbar-header">
+                <div class="navbar-brand">
+                    <a href="index.html">
+                        <img src="../../assets/images/logo.png" alt="logo" class="img-responsive">
+
+                    </a>
+                </div>
+            </div>*@
+                <!-- END BRAND HEADING -->
+                <div class="nav-top">
+                    <ul style="float:left;" class="displayleftlogo">
+                        <li>
+                            <a href="">
+                                <img src="../../assets/images/logo.png" alt="logo" class="img-responsive" style="width:158px;margin-top:8px;margin-left:-46px;">
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- BEGIN RIGHT SIDE DROPDOWN BUTTONS -->
+                    <ul class="nav navbar-right">
+                        <li class="dropdown">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" style="float:left" data-target=".sidebar-collapse">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <ul style="float:left;" class="displaylogo">
+                                <li>
+                                    <a href="">
+                                        <img src="../../assets/images/logo.png" alt="logo" class="img-responsive" style="width:158px;margin-top:8px;margin-left:-46px;">
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-bell"></i> <span class="badge up badge-success" id="uploadalert">1</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-scroll dropdown-alerts">
+                                <li class="dropdown-header">
+                                    <i class="fa fa-bell"></i> New Alerts
+                                </li>
+                                <li id="alertScroll">
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <a href="/Admin/UpdateNotification" id="alertclick">
+                                                <div class="alert-icon bg-info pull-left">
+                                                    <i class="fa fa-download"></i>
+                                                </div>
+                                                Uploaded Guest Details <span class="badge badge-info pull-right uploadcount" id="uploadcount"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-footer">
+                                    <a href="#">
+                                        View All Alerts
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="dropdown user-box">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img class="img-circle" src="../../assets/images/user.jpg" alt=""> <span class="user-info">@User_Name</span> <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+
+                                <li>
+                                    <a class="btnLogout">
+                                        <i class="fa fa-power-off"></i> Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                    <!-- END RIGHT SIDE DROPDOWN BUTTONS -->
+                    <!-- BEGIN TOP MENU -->
+                    <!-- END TOP MENU -->
+
+                </div><!-- /.nav-top -->
+            </nav><!-- /.navbar-top -->
+            <!-- END TOP NAVIGATION -->
+            <!-- BEGIN SIDE NAVIGATION -->
+            <nav class="navbar-side" role="navigation">
+                <div class="navbar-collapse sidebar-collapse collapse">
+                    <ul id="side" class="nav navbar-nav side-nav">
+                        <!-- BEGIN SIDE NAV MENU -->
+                        <!-- Navigation category -->
+                        <li>
+                            <h4>Navigation</h4>
+                        </li>
+                        <!-- END Navigation category -->
+
+                        <li>
+                            <a class="active" href="/Admin/Dashboard">
+                                <i class="fa fa-dashboard"></i> Dashboard
+                            </a>
+                        </li><!-- BEGIN CHARTS DROPDOWN -->
+                        @if (UserType != "Staff")
+                        {
+                            <li class="panel">
+                                <a href="javascript:;" data-parent="#side" data-toggle="collapse" class="accordion-toggle" data-target="#charts">
+                                    <i class="fa fa-edit"></i> Masters <span class="fa arrow"></span>
+                                </a>
+                                <ul class="collapse nav" id="masters">
+                                    @if (UserType == "SuperAdmin")
+                                    {
+                                        <li>
+                                            <a href="/Master/Organization">
+                                                <i class="fa fa-angle-double-right"></i> Organization
+                                            </a>
+                                        </li>
+                                    }
+                                    <li>
+                                        <a href="/Master/BranchList">
+                                            <i class="fa fa-angle-double-right"></i> Branch Master
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="/Master/UserList">
+                                            <i class="fa fa-angle-double-right"></i> User Master
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/Master/FRRO">
+                                            <i class="fa fa-angle-double-right"></i> FRRO Master
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/Master/NearbyPlaces">
+                                            <i class="fa fa-angle-double-right"></i> Near by Places
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/Master/Amenities">
+                                            <i class="fa fa-angle-double-right"></i> Amenities
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/Master/Cuisine">
+                                            <i class="fa fa-angle-double-right"></i> Cuisine
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <!-- END CHARTS DROPDOWN -->
+                        }
+
+                        <li class="panel">
+                            <a href="javascript:;" data-parent="#side" data-toggle="collapse" class="accordion-toggle" data-target="#charts">
+                                <i class="fa fa-cogs"></i> Add Guest <span class="fa arrow"></span>
+                            </a>
+                            <ul class="collapse nav nav1" id="guestslist">
+                                <li>
+                                    <a href="/Guest/WalkInGuest">
+                                        <i class="fa fa-angle-double-right"></i> Walk-In Guest
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/Guest/Register">
+                                        <i class="fa fa-angle-double-right"></i> Reserved Guest
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="/Guest/GuestList?flag=0">
+                                <i class="fa fa-list"></i> Guests List<span class="badge badge-primary" id="listnotification" style="display:none">New</span>
+                            </a>
+                        </li>
+                        @*<li>
+                        <a href="/Admin/Reports">
+                            <i class="fa fa-text-width"></i> Reports
+                        </a>
+                    </li>*@
+
+                        <li class="panel">
+                            <a href="javascript:;" data-parent="#side" data-toggle="collapse" class="accordion-toggle" data-target="#charts">
+                                <i class="fa fa-text-width"></i> Reports <span class="fa arrow"></span>
+                            </a>
+                            <ul class="collapse nav nav1" id="reportlist">
+                                <li>
+                                    <a href="/Admin/Reports">
+                                        <i class="fa fa-angle-double-right"></i> Guest Report
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/Admin/FRROReport">
+                                        <i class="fa fa-angle-double-right"></i> FRRO Report
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul><!-- /.side-nav -->
+
+
+
+                </div><!-- /.navbar-collapse -->
+            </nav><!-- /.navbar-side -->
+            <!-- END SIDE NAVIGATION -->
+            <!-- BEGIN MAIN PAGE CONTENT -->
+            <div id="page-wrapper" class="pagewrapmobile">
+                @RenderBody()
+                <!-- BEGIN FOOTER CONTENT -->
+                <div class="footer">
+                    <div class="footer-inner">
+                        <!-- basics/footer -->
+                        <div class="footer-content">
+                            &copy; 2019-2020 <a href="http://intellilabs.co.in/">intelliLabs</a>, All Rights Reserved.
+                        </div>
+                        <!-- /basics/footer -->
+                    </div>
+                </div>
+                <button type="button" id="back-to-top" class="btn btn-primary btn-sm back-to-top">
+                    <i class="fa fa-angle-double-up icon-only bigger-110"></i>
+                </button>
+                <!-- END FOOTER CONTENT -->
+            </div><!-- /#page-wrapper -->
+            <!-- END MAIN PAGE CONTENT -->
+        </div>
+    </div>
+
+
+    <!-- core JavaScript -->
+    <script src="../../assets/js/jquery.min.js"></script>
+    <script src="../../assets/js/plugins/jqueryui/jquery-ui.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="../../assets/js/plugins/pace/pace.min.js"></script>
+
+    <!-- PAGE LEVEL PLUGINS JS -->
+    <script src="../../assets/js/plugins/jqueryui/jquery-ui.custom.min.js"></script>
+    <script src="../../assets/js/plugins/jqueryui/jquery.ui.touch-punch.min.js"></script>
+    <script src="../../assets/js/plugins/daterangepicker/moment.js"></script>
+    <script src="../../assets/js/plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="../../assets/js/plugins/morris/raphael-min.js"></script>
+    <script src="../../assets/js/plugins/morris/morris.min.js"></script>
+    <script src="../../assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="../../assets/js/plugins/jquery-sparkline/jquery.sparkline.min.js"></script>
+    <script src="../../assets/js/plugins/easypiechart/jquery.easypiechart.min.js"></script>
+    <script src="../../assets/js/plugins/easypiechart/excanvas.compiled.js"></script>
+    <script src="../../assets/js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+    <script src="../../assets/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <script src="../../assets/js/plugins/footable/footable.min.js"></script>
+    <script src="../../assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../assets/js/plugins/datatables/datatables.js"></script>
+    <script src="../../assets/js/plugins/datatables/datatables.responsive.js"></script>
+    <script src="../../assets/js/plugins/datetime/bootstrap-datetimepicker.min.js"></script>
+    <script src="../../assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+
+    <!-- Themes Core Scripts -->
+    <script src="../../assets/js/main.js"></script>
+
+    <!-- REQUIRE FOR SPEECH COMMANDS -->
+    <script src="../../assets/js/speech-commands.js"></script>
+    <script src="../../assets/js/plugins/gritter/jquery.gritter.min.js"></script>
+    <script src="../../assets/js/plugins/colorBox/jquery.colorbox-min.js"></script>
+
+    <!-- initial page level scripts for examples -->
+    <script src="../../assets/js/plugins/slimscroll/jquery.slimscroll.init.js"></script>
+    <script src="../../assets/js/plugins/footable/footable.init.js"></script>
+    <script src="../../assets/js/plugins/datatables/datatables.init.js"></script>
+    <script src="../../assets/js/home-page.init.js"></script>
+    <script src="../../assets/js/plugins/jquery-sparkline/jquery.sparkline.init.js"></script>
+    <script src="../../assets/js/plugins/easypiechart/jquery.easypiechart.init.js"></script>
+
+
+
+    <script type="text/javascript">
+
+        //colorbox function
+        jQuery(function ($) {
+            var $overflow = '';
+            var colorbox_params = {
+                rel: 'colorbox',
+                reposition: true,
+                scalePhotos: true,
+                scrolling: false,
+                previous: '<i class="fa fa-arrow-left text-gray"></i>',
+                next: '<i class="fa fa-arrow-right text-gray"></i>',
+                close: '<i class="fa fa-times text-primary"></i>',
+                current: '{current} of {total}',
+                maxWidth: '100%',
+                maxHeight: '100%',
+                onOpen: function () {
+                    $overflow = document.body.style.overflow;
+                    document.body.style.overflow = 'hidden';
+                },
+                onClosed: function () {
+                    document.body.style.overflow = $overflow;
+                },
+                onComplete: function () {
+                    $.colorbox.resize();
+                }
+            };
+
+            $('.tc-gallery [data-rel="colorbox"]').colorbox(colorbox_params); // for enable colorbox gallery style 1
+            $('.thumbnail [data-rel="colorbox"]').colorbox(colorbox_params); // for enable gallery style 2
+
+            $("#cboxLoadingGraphic").append("<i class='fa fa-spinner fa-spin'></i>");//let's add a custom loading icon for colorbox
+
+        })
+
+        //Bootstrap Datetimepicker
+        $('.form_datetime').datetimepicker({
+            //language:  'fr',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1
+        });
+        $('.form_date').datetimepicker({
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0
+        });
+        $('.form_time').datetimepicker({
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 1,
+            minView: 0,
+            maxView: 1,
+            forceParse: 0
+        });
+
+        //Bootstrap Datepicker
+        $('.datepicker').datepicker();
+
+
+        //for tables checkbox demo
+        jQuery(function ($) {
+            $('table th input:checkbox').on('click', function () {
+                var that = this;
+                $(this).closest('table').find('tr > td:first-child input:checkbox')
+                    .each(function () {
+                        this.checked = that.checked;
+                        $(this).closest('tr').toggleClass('selected');
+                    });
+
+            });
+        });
+
+
+        //Live Chat
+        jQuery(function ($) {
+            $('#live-chat-ui header').on('click', function () {
+                $('.chat').slideToggle(300, 'swing');
+                $('.chat-message-counter').fadeToggle(300, 'swing');
+
+            });
+
+            $('.chat-close').on('click', function (e) {
+                e.preventDefault();
+                $('#live-chat-ui').fadeOut(300);
+            });
+
+        })
+
+        $('#minicalendar').datepicker();
+
+        $.ajax({
+            type: "GET",
+            url: "/Admin/GetNotification",
+            dataType: "json",
+            success: function (data) {
+                document.getElementById('uploadcount').innerHTML = data;
+                document.getElementById('uploadalert').innerHTML = data;
+                if (data > 0)
+                    document.getElementById('listnotification').style.display = "block";
+                else
+                    document.getElementById('listnotification').style.display = "none";
+            }
+        });
+
+    
+        //var anchors=$('ul.nav li a').on('click', function () {                                
+        //    $(this).addClass('active');
+        //    anchors.not(this).removeClass('active');
+        //});
+
+        //var ullist = $('ul.nav1').on('click', function () {            
+        //    $(this).addClass('in');
+        //    ullist.not(this).removeClass('in');
+        //});
+     
+    </script>
+    <div id="loader" style="display:none;width:69px;height:89px ;position:fixed;top:40%;left:50%;padding:2px;"><img src='../../assets/images/loader.gif' width="64" height="64" /><br>Loading..</div>
+</body>
+</html>

@@ -1,0 +1,131 @@
+﻿
+@{
+    ViewBag.Title = "Reports";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    List<ZS_SmartCheckIn.Models.Entity.Ent_Guest> Guestlist = ViewBag.Guestlist;
+    var i = 0;
+    }
+<script src="../../Scripts/ajax/report.js"></script>
+<!-- BEGIN BREADCRUMB -->
+<div class="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <a href="#">Reports</a>
+        </li>
+        <li class="active">Guest Report</li>
+    </ul>
+</div>
+<!-- END BREADCRUMB -->
+
+<div class="page-header title">
+    <!-- PAGE TITLE ROW -->
+    <h1>
+        Guest Report
+    </h1>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+
+        <!-- Start jQuery Datatable -->
+        <div class="well white">
+            <div id="ft-5" class="panel-collapse collapse in">
+                <div class="portlet-body">
+
+                    <form role="form" method="post">
+                        <div class="row">
+                            <div class="col-lg-2 col-sm-6">
+                                <div class="form-group">
+                                    <label>From</label>
+                                    <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input1" data-link-format="yyyy-mm-dd">
+                                        <span class="input-group-addon">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </span>
+                                        <input class="form-control" />
+                                    </div>
+                                    <input type="hidden" id="dtp_input1" value="" /><br />
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-6">
+                                <div class="form-group">
+                                    <label>To</label>
+                                    <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                                        <span class="input-group-addon">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </span>
+                                        <input class="form-control" />
+                                    </div>
+                                    <input type="hidden" id="dtp_input2" value="" /><br />
+                                </div>
+                            </div>
+                           
+                           
+                            <div class="form-group">
+                                <button type="button" class="btn btn-info btnGuestReport" style="margin-top:2%;">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+
+        <div class="well white">
+            <table id="SampleDT" class="datatable table table-hover table-striped table-bordered tc-table">
+                <thead>
+                    <tr>
+                        <th>SlNo</th>
+                        <th  data-class="expand">Name</th>
+                        <th   data-hide="phone,tablet">Arrival Date</th>
+                        <th data-hide="phone,tablet">Phone</th>
+                        <th style="display:none">Is_Active</th>
+                        <th>Status</th>
+                      
+                    </tr>
+                </thead>
+                <tbody id="reportBody">
+                    @foreach (var item in Guestlist)
+                    {
+                        i++;
+                    <tr id="@item.Customer_Code">
+                        <td>@i</td>
+                        <td><a href="/Admin/ReportDetail?customercode=@item.Customer_Code">@item.Guest_Firstname</a></td>                  
+                        <td>@item.Arrival_Date.ToShortDateString()</td>
+                        <td>@item.Guest_MobileNo</td>
+                        <td style="display:none">@item.Is_Active</td>
+                        @if (item.Is_Active == 1)
+                        {
+                            <td>
+                                <span class="label label-pending arrowed-in-right arrowed-in">New Guest</span>
+                            </td>
+                        }
+                        else if (item.Is_Active == 2)
+                        {
+                            <td><span class="label label-terminated arrowed-in-right arrowed-in">ID Not Verified</span></td>
+                        }
+                        else if (item.Is_Active == 3)
+                        {
+                            <td><span class="label label-suspended arrowed-in-right arrowed-in">ID Verified</span></td>
+                        }
+                        else if (item.Is_Active == 4)
+                        {
+                            <td><span class="label label-paid arrowed-in-right arrowed-in">Checked-In</span></td>
+                        }
+
+
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- End jQuery Datatable -->
+    </div>
+</div>
+<script>
+    $('ul#masters').removeClass('in');
+    $('ul#guestslist').removeClass('in');
+    $('ul#reportlist').addClass('in');
+</script>

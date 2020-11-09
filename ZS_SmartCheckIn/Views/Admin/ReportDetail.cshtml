@@ -1,0 +1,458 @@
+﻿@model  ZS_SmartCheckIn.Models.Entity.Ent_Guest
+@{
+    /**/
+
+    /**/
+
+    ViewBag.Title = "ReportDetail";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    List<ZS_SmartCheckIn.Models.Entity.Ent_GuestData> listGuest = ViewBag.listGuest;
+    var i = 0;
+}
+
+
+
+<script src="../../Scripts/ajax/viewguest.js"></script>
+<!-- BEGIN PAGE HEADING ROW -->
+<style>
+
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        padding-top: 150px; /* Location of the box */
+        padding-left: 160px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 50%;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <!-- BEGIN BREADCRUMB -->
+        <div class="breadcrumbs">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">Guest List</a>
+                </li>
+                <li class="active">User Profile</li>
+            </ul>
+
+        </div>
+        <!-- END BREADCRUMB -->
+        <div class=" page-header title">
+            <h1>Profile</h1>
+        </div>
+    </div><!-- /.col-lg-12 -->
+</div><!-- /.row -->
+<!-- END PAGE HEADING ROW -->
+<div class="messagebox"></div>
+
+<div class="row">
+    <div class="col-lg-12">
+
+        <!-- START YOUR CONTENT HERE -->
+        <div class="row">
+            <div class="col-lg-4 col-md-4">
+                <div class="well well-sm white">
+                    <div id="myCarousel" class="carousel slide" data-interval="false">
+                        <!-- Indicators -->
+                        <ol class="carousel-indicators">
+                            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                            @*<li data-target="#myCarousel" data-slide-to="1"></li>*@
+                            <li data-target="#myCarousel" data-slide-to="2"></li>
+                        </ol>
+
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner" style="text-align:-webkit-center;">
+                            @if (!string.IsNullOrEmpty(@Model.entGuestData.Guest_Document))
+                            {
+
+                                <div class="item active">
+                                    <img src="../../CardImages/@Model.entGuestData.Guest_Document" id="idcard" width="300" height="234" />
+                                </div>
+                            }
+
+                            @*@if (!string.IsNullOrEmpty(@Model.entGuestData.Guest_DocumentBack))
+                                {
+
+                                    <div class="item">
+                                        <img src="../../CardImages/@Model.entGuestData.Guest_DocumentBack" id="idcard1" width="300" height="234">
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="item">
+                                        <img src="../../assets/images/user-1.jpg" id="idcard1" style="object-fit:cover;width:300px;height:210px">
+                                    </div>
+                                }*@
+
+                            @if (!string.IsNullOrEmpty(@Model.entGuestData.Guest_DocumentVisa))
+                            {
+                                <div class="item">
+                                    <img src="../../CardImages/@Model.entGuestData.Guest_DocumentVisa" id="idcard2" width="300" height="234">
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="item">
+                                    <img src="../../assets/images/user-1.jpg" style="object-fit:cover;width:300px;height:210px" id="idcard2">
+                                </div>
+                            }
+                            <img src="../../assets/images/user-1.jpg" id="idcardCanvas" class="img-responsive" alt="" style="display: none;">
+                        </div>
+
+                        <!-- Left and right controls -->
+                        <a class="left carousel-control" href="#myCarousel" data-slide="prev" style="width:2%">
+                            <span class="glyphicon glyphicon-chevron-left" style="margin-top:2px;margin-right:-19px"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right" style="margin-top:2px;margin-right:2px"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="well white padding-25" id="divGallery">
+                    <!-- Gallery Style 1 -->
+                    <ul class="tc-gallery clearfix" id="listGallery">
+                        @foreach (var item in listGuest)
+                        {
+                            <li id='@item.Guest_Code'>
+
+                                <img alt="" src="../../CardImages/@item.Guest_Document" style="width:120px; height: 90px;">
+
+                                <div class="tags">
+                                    <span class="label-holder">
+                                        <span class="label label-inverse arrowed-in">@item.Guest_Firstname</span>
+                                    </span>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+            </div>
+            <div class="col-lg-8 col-md-8">
+                <div class="tc-tabs">
+                    <!-- Nav tabs style 1 -->
+                    <ul class="nav nav-tabs tab-lg-button tab-color-dark background-dark white">
+                        <li class="active"><a href="#p2" data-toggle="tab"><i class="fa fa-desktop bigger-130"></i>Overview</a></li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+
+                        <div class="tab-pane fade in active" id="p2">
+                            <h2>Guest details</h2>
+                            <div class="hr hr-12 hr-double"></div>
+                            <form class="form-horizontal" role="form" method="post">
+                                <div class="form-group">
+                                    <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12">
+                                        <input type="hidden" name="GuestCode" id="GuestCode" value="@Model.entGuestData.Guest_Code">
+                                        <input type="hidden" id="GuestDataID" value="@Model.entGuestData.Guestdata_id">
+                                        <input type="hidden" name="ConfirmationCode" id="ConfirmationCode" value="@Model.Confirmation_Code">
+                                        <input type="hidden" name="ImageName" id="ImageName" value="@Model.entGuestData.Guest_Document">
+
+                                        <div class="form-group">
+                                            <label class="col-sm-4    col-xs-6 control-label">Customer ID :</label>
+                                            <div class="col-sm-4   col-xs-6 ">
+                                                <label id="CustomerCode" class="control-label">@Model.Customer_Code</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4  col-xs-6 control-label">First Name :</label>
+                                            <div class="col-sm-4  col-xs-6">
+                                                <label id="FirstName" class="control-label">@Model.entGuestData.Guest_Firstname</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4  col-xs-6 control-label">Last Name :</label>
+                                            <div class="col-sm-4  col-xs-6">
+                                                <label id="LastName" class="control-label">@Model.entGuestData.Guest_Lastname</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label class="col-sm-4  col-xs-6 control-label">Gender : </label>
+                                            <div class="col-sm-4  col-xs-6 ">
+                                                <label id="Gender" class="control-label">@Model.entGuestData.Guest_Gender</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label class="col-sm-4  col-xs-6 control-label">DOB : </label>
+                                            <div class="col-sm-4  col-xs-6 ">
+                                                <label id="DOB" class="control-label">@Model.entGuestData.Guest_DOB</label>
+                                            </div>
+                                        </div>
+                                        @*<div class="form-group ">
+                                                <label class="col-sm-4 control-label">Son/Daughter of : </label>
+                                                <div class="col-sm-4">
+                                                    <label id="Father" class="col-sm-2 control-label">@Model.entGuestData.Guest_Father</label>
+                                                </div>
+                                            </div>*@
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                        <div class=" ">
+                                            @if (Model.entGuestData.Guest_ProfileImage == "" || Model.entGuestData.Guest_ProfileImage == null)
+                                            {
+                                                <img src="../../assets/images/user-1.jpg" id="profileImage" class="profImage" style="width:150px;height:150px;object-fit:cover; border: 5px solid #555;">
+                                            }
+                                            else
+                                            {
+                                                <img src="../../ProfileImages/@Model.entGuestData.Guest_ProfileImage" class="profImage" id="profileImage" style="width:150px;height:150px;object-fit:cover; border: 5px solid #555;" alt="">
+                                            }
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+
+                                <div class="form-group ">
+                                    <label class="col-sm-3  col-xs-6 control-label">Email :</label>
+                                    <div class="col-sm-3 col-xs-6">
+                                        <label id="Email" class="control-label">@(!string.IsNullOrEmpty(Model.entGuestData.Guest_Email) ? Model.entGuestData.Guest_Email : "nil")</label>
+                                    </div>
+                                    <label class="col-sm-3 col-xs-6 control-label">Contact :</label>
+                                    <div class="col-sm-3 col-xs-6">
+                                        <label id="Phone" class="control-label">@(!string.IsNullOrEmpty(Model.entGuestData.Guest_PhoneNo) ? Model.entGuestData.Guest_PhoneNo : "nil")</label>
+                                    </div>
+                                </div>
+                                <div class="form-group ">
+                                    <label class="col-sm-3 col-xs-6 control-label">Purpose Of Visit :</label>
+                                    <div class="col-sm-3 col-xs-6 ">
+                                        <label id="Purpose" class="control-label">@Model.entGuestData.Guest_PurposeofVisit</label>
+                                    </div>
+                                    <label class="col-sm-3  col-xs-6 control-label">Nationality :</label>
+                                    <div class="col-sm-3  col-xs-6">
+                                        <label id="Nationality" class="control-label">@Model.entGuestData.Guest_Nationality</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 col-xs-6  control-label">Gender :</label>
+                                    <div class="col-sm-3 col-xs-6 ">
+                                        <label id="Gender" class="control-label">@Model.entGuestData.Guest_Gender</label>
+                                    </div>
+                                    <label class="col-sm-3 col-xs-6  control-label">Country Of Issue :</label>
+                                    <div class="col-sm-3 col-xs-6 ">
+                                        <label id="CountryofIssue" class="control-label">@(!string.IsNullOrEmpty(Model.entGuestData.Guest_CountryofIssue) ? Model.entGuestData.Guest_CountryofIssue : "nil")</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Address :</label>
+                                    <div class="col-sm-9">
+                                        <label id="Address">@Model.entGuestData.Guest_Address</label>
+                                    </div>
+                                </div>
+                                <div class="form-group ">
+
+                                    <label class="col-sm-3 col-xs-6 control-label">Date Of Issue :</label>
+                                    <div class="col-sm-3 col-xs-6 ">
+                                        <label id="DateOfIssue" class="control-label">@(!string.IsNullOrEmpty(Model.entGuestData.Guest_DateOfIssue) ? Model.entGuestData.Guest_DateOfIssue : "nil")</label>
+                                    </div>
+                                    <label class="col-sm-3 col-xs-6  control-label">Expiry Date :</label>
+                                    <div class="col-sm-3 col-xs-6 ">
+                                        <label id="ExpiryDate" class="control-label">@(!string.IsNullOrEmpty(Model.entGuestData.Guest_ExpiryDate) ? Model.entGuestData.Guest_ExpiryDate : "nil")</label>
+                                    </div>
+                                </div>
+                                @*<div class="form-group ">
+                                        <label class="col-sm-3 col-xs-6  control-label">Kids :</label>
+                                        <div class="col-sm-3 col-xs-6 ">
+                                            <label id="Kids" class="control-label">@Model.entGuestData.Guest_ChildCount</label>
+                                        </div>
+
+                                        <label class="col-sm-3 col-xs-6  control-label">Adults :</label>
+                                        <div class="col-sm-3 col-xs-6 ">
+                                            <label id="Adults" class="control-label">@Model.entGuestData.Guest_AdultCount</label>
+                                        </div>
+                                    </div>*@
+                                @*<div class="form-group ">
+                                        <label class="col-sm-3  col-xs-6 control-label">State :</label>
+                                        <div class="col-sm-3  col-xs-6 ">
+                                            <label id="State" class="control-label">@(!string.IsNullOrEmpty(Model.entGuestData.Guest_State) ? Model.entGuestData.Guest_State : "nil")</label>
+                                        </div>
+                                        <label class="col-sm-3  col-xs-6  control-label">Country :</label>
+                                        <div class="col-sm-3  col-xs-6 ">
+                                            <label id="Country" class="control-label">@(!string.IsNullOrEmpty(Model.entGuestData.Guest_Country) ? Model.entGuestData.Guest_Country : "nil")</label>
+                                        </div>
+                                    </div>*@
+                                <div class="portlet portlet-basic">
+                                    <!-- /Basic Portlet -->
+                                    <div class="portlet-heading">
+                                        <div class="portlet-title">
+                                            <h4>VISA DETAILS</h4>
+                                        </div>
+                                        <div class="portlet-widgets">
+
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#basic"><i class="fa fa-chevron-down"></i></a>
+                                            <span class="divider"></span>
+
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                                    <div id="basic" class="panel-collapse collapse in">
+                                        <div class="portlet-body">
+                                            <div class="note">
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">Visa No :</label>
+                                                    <div class="col-sm-3 ">
+                                                        <label id="VisaNo" class="control-label">@Model.entGuestData.Guest_VisaNo</label>
+                                                    </div>
+
+                                                    <label class="col-sm-3 control-label">Type Of Visa :</label>
+                                                    <div class="col-sm-3 ">
+                                                        <label id="VisaType" class="control-label">@Model.entGuestData.Guest_VisaType</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @*<label class="col-sm-3 control-label">City (Place Of Issue) :</label>
+                                                        <div class="col-sm-3">
+                                                            <label id="VisaCity" class="control-label">@Model.entGuestData.Guest_VisaPOICity</label>
+                                                        </div>*@
+
+
+                                                    <label class="col-sm-3 control-label">Date Of Issue :</label>
+                                                    <div class="col-sm-3">
+                                                        <label id="IssueDate" class="control-label">@(!string.IsNullOrEmpty(Model.entGuestData.Guest_VisaDateofIssue) ? Model.entGuestData.Guest_VisaDateofIssue : "nil")</label>
+                                                    </div>
+                                                    <label class="col-sm-3 control-label">Valid Till :</label>
+                                                    <div class="col-sm-3">
+                                                        <label id="ValidTill" class="control-label">@Model.entGuestData.Guest_VisaValidTill</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group  ">
+
+                                                    <label class="col-sm-3 control-label">Country (Place Of Issue) :</label>
+                                                    <div class="col-sm-3">
+                                                        <label id="VisaCountry" class="control-label">@Model.entGuestData.Guest_VisaPOICountry</label>
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div><!--nav-tabs style 1-->
+            </div>
+        </div>
+        <!-- END YOUR CONTENT HERE -->
+    </div>
+</div>
+
+<script>
+
+    $('#divGallery').on('click', 'li', function () {
+
+        var Guest_Code = this.id;
+
+        $.ajax({
+            type: "POST",
+            url: "/Guest/SelectGuestDetails",
+            data: "{'Guest_Code':'" + Guest_Code + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+
+                if (data != "") {
+                    document.getElementById('idcard').src = "../../CardImages/" + data.entGuestData.Guest_Document;
+
+
+                    if (data.entGuestData.Guest_ProfileImage == "" || data.entGuestData.Guest_ProfileImage == null) {
+
+                        document.getElementById('profileImage').src = "../../assets/images/user-1.jpg";
+                    }
+                    else {
+                        document.getElementById('profileImage').src = "../../ProfileImages/" + data.entGuestData.Guest_ProfileImage;
+                    }
+
+
+                    //if (data.entGuestData.Guest_DocumentBack != '' && data.entGuestData.Guest_DocumentBack != null)
+                    //    document.getElementById('idcard1').src = "../../CardImages/" + data.entGuestData.Guest_DocumentBack;
+                    //else
+                    //    document.getElementById('idcard1').src = "../../assets/images/user-1.jpg";
+
+                    if (data.entGuestData.Guest_DocumentVisa != '' && data.entGuestData.Guest_DocumentVisa != null)
+                        document.getElementById('idcard2').src = "../../CardImages/" + data.entGuestData.Guest_DocumentVisa;
+                    else
+                        document.getElementById('idcard2').src = "../../assets/images/user-1.jpg";
+
+                    document.getElementById('GuestCode').value = data.entGuestData.Guest_Code;
+                    document.getElementById('GuestDataID').value = data.entGuestData.Guestdata_id;
+                    document.getElementById('FirstName').innerText = data.entGuestData.Guest_Firstname;
+                    document.getElementById('LastName').innerText = data.entGuestData.Guest_Lastname;
+                    document.getElementById('Phone').innerText = data.entGuestData.Guest_PhoneNo;
+                    document.getElementById('Email').innerText = data.entGuestData.Guest_Email;
+                    document.getElementById('Father').innerText = data.entGuestData.Guest_Father;
+                    document.getElementById('DOB').innerText = data.entGuestData.Guest_DOB;
+                    document.getElementById('Country').innerText = data.entGuestData.Guest_Country;
+                    document.getElementById('City').innerText = data.entGuestData.Guest_City;
+                    document.getElementById('State').innerText = data.entGuestData.Guest_State;
+                    document.getElementById('Nationality').innerText = data.entGuestData.Guest_Nationality;
+                    document.getElementById('Address').innerText = data.entGuestData.Guest_Address;
+                    document.getElementById('Gender').innerText = data.entGuestData.Guest_Gender;
+                    document.getElementById('Purpose').innerText = data.entGuestData.Guest_PurposeofVisit;
+                    document.getElementById('CountryofIssue').innerText = data.entGuestData.Guest_CountryofIssue;
+                    document.getElementById('DateOfIssue').innerText = data.entGuestData.Guest_DateOfIssue;
+                    document.getElementById('ExpiryDate').innerText = data.entGuestData.Guest_ExpiryDate;
+
+                    document.getElementById('VisaNo').value = data.entGuestData.Guest_VisaNo;
+                    document.getElementById('VisaCity').value = data.entGuestData.Guest_VisaPOICity;
+                    document.getElementById('VisaCountry').value = data.entGuestData.Guest_VisaPOICountry;
+                    document.getElementById('VisaType').value = data.entGuestData.Guest_VisaType;
+                    document.getElementById('ValidTill').value = data.entGuestData.Guest_VisaValidTill;
+                    document.getElementById('IssueDate').value = data.entGuestData.Guest_VisaDateofIssue;
+
+                    //document.getElementById('Adults').value = data.entGuestData.Guest_Adults;
+                    //document.getElementById('Kids').value = data.entGuestData.Guest_Kids;
+                    //document.getElementById('Nights').value = data.entGuestData.Guest_Nights;
+                    //document.getElementById('Days').value = data.entGuestData.Guest_Days;
+                    document.getElementById('ImageName').value = data.entGuestData.Guest_Document;
+
+                }
+                else {
+                }
+            },
+            error: function () { }
+        });
+    });
+
+
+</script>

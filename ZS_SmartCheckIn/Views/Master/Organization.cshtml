@@ -1,0 +1,405 @@
+﻿
+@model ZS_SmartCheckIn.Models.Entity.Ent_Organization
+
+@{
+    ViewBag.Title = "Organization";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script src="../../Scripts/ajax/organization.js"></script>
+<!-- BEGIN BREADCRUMB -->
+<div class="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <a href="#">Masters</a>
+        </li>
+        <li class="active">Organization</li>
+    </ul>
+</div>
+<!-- END BREADCRUMB -->
+
+<div class="page-header title">
+    <!-- PAGE TITLE ROW -->
+    <h1>
+        Organization Master
+        @*<span class="sub-title">general elements, css only</span>*@
+    </h1>
+</div>
+
+
+<!-- START YOUR CONTENT HERE -->
+<div class="messagebox"></div>
+<div class="row" id="myDiv">
+    <div class="col-lg-12">
+        <div class="portlet">
+            <div class="portlet-heading dark">
+                <div class="portlet-title">
+                    <h4>Organization Profile</h4>
+                </div>
+                <div class="portlet-widgets">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#f-3"><i class="fa fa-chevron-down"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div id="f-3" class="panel-collapse collapse in">
+                <div class="portlet-body">
+                    <form class="form-horizontal " role="form" method="post">
+                        <input type="hidden" id="OrgID" value="@Model.Organization_ID" />
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Organization Name<span class="red">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="OrgName" placeholder="Enter Organization Name" value="@Model.Organization_Name">
+                            </div>
+                            <div class="col-sm-2">  <span id="validName" class="requiredv" style="color:red"></span></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Address<span class="red">*</span></label>
+                            <div class="col-sm-4">
+                                <textarea class="form-control" id="Address" placeholder="Enter Address">@Model.Organization_Address</textarea>
+                            </div>
+                            <div class="col-sm-4">  <span id="validAddress" class="requiredv" style="color:red"></span></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Contact Person</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="ContactPerson" placeholder="Contact Person Name" value="@Model.Organization_ContactPerson">
+                            </div>
+                            <label class="col-sm-2 control-label">Phone<span class="red">*</span></label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="Phone" placeholder="Enter Phonenumber" value="@Model.Organization_Phone">
+                                <span id="validMobile" class="requiredv" style="color:red"></span>
+                            </div>                          
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">City</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="City" placeholder="Enter City Name" value="@Model.Organization_City">
+                            </div>
+                            <label class="col-sm-2 control-label">State<span class="red">*</span></label>
+                            <div class="col-sm-4">
+                                <select class="form-control" id="State">
+                                    <option value="" @(Model.Organization_State == "" ? "selected" : "")> SELECT</option>
+                                    <option value="1" @(Model.Organization_State == "1" ? "selected" : "")> ANDAMAN AND NICOBAR ISLANDS</option>
+                                    <option value="2" @(Model.Organization_State == "2" ? "selected" : "")> ANDHRA PRADESH</option>
+                                    <option value="3" @(Model.Organization_State == "3" ? "selected" : "")> ARUNACHAL PRADESH</option>
+                                    <option value="4" @(Model.Organization_State == "4" ? "selected" : "")> ASSAM</option>
+                                    <option value="5" @(Model.Organization_State == "5" ? "selected" : "")> BIHAR</option>
+                                    <option value="34" @(Model.Organization_State == "34" ? "selected" : "")> CHANDIGARH</option>
+                                    <option value="6" @(Model.Organization_State == "6" ? "selected" : "")> CHHATTISGARH</option>
+                                    <option value="35" @(Model.Organization_State == "35" ? "selected" : "")> DADRA AND NAGAR HAVELI</option>
+                                    <option value="7" @(Model.Organization_State == "7" ? "selected" : "")> DAMAN AND DIU</option>
+                                    <option value="8" @(Model.Organization_State == "8" ? "selected" : "")> DELHI</option>
+                                    <option value="9" @(Model.Organization_State == "9" ? "selected" : "")> GOA</option>
+                                    <option value="10" @(Model.Organization_State == "10" ? "selected" : "")> GUJARAT</option>
+                                    <option value="31" @(Model.Organization_State == "31" ? "selected" : "")> UTTARAKHAND</option>
+                                    <option value="30" @(Model.Organization_State == "30" ? "selected" : "")> UTTAR PRADESH</option>
+                                    <option value="32" @(Model.Organization_State == "32" ? "selected" : "")> WEST BENGAL</option>
+                                    <option value="11" @(Model.Organization_State == "11" ? "selected" : "")> HARYANA</option>
+                                    <option value="12" @(Model.Organization_State == "12" ? "selected" : "")> HIMACHAL PRADESH</option>
+                                    <option value="13" @(Model.Organization_State == "13" ? "selected" : "")> JAMMU AND KASHMIR</option>
+                                    <option value="14" @(Model.Organization_State == "14" ? "selected" : "")> JHARKHAND</option>
+                                    <option value="15" @(Model.Organization_State == "15" ? "selected" : "")> KARNATAKA</option>
+                                    <option value="16" @(Model.Organization_State == "16" ? "selected" : "")> KERALA</option>
+                                    <option value="36" @(Model.Organization_State == "36" ? "selected" : "")> LAKSHADWEEP</option>
+                                    <option value="17" @(Model.Organization_State == "17" ? "selected" : "")> MADHYA PRADESH</option>
+                                    <option value="18" @(Model.Organization_State == "18" ? "selected" : "")> MAHARASHTRA</option>
+                                    <option value="19" @(Model.Organization_State == "19" ? "selected" : "")> MANIPUR</option>
+                                    <option value="20" @(Model.Organization_State == "20" ? "selected" : "")> MEGHALAYA</option>
+                                    <option value="21" @(Model.Organization_State == "21" ? "selected" : "")> MIZORAM</option>
+                                    <option value="22" @(Model.Organization_State == "22" ? "selected" : "")> NAGALAND</option>
+                                    <option value="23" @(Model.Organization_State == "23" ? "selected" : "")> ODISHA</option>
+                                    <option value="24" @(Model.Organization_State == "24" ? "selected" : "")> PUDUCHERRY</option>
+                                    <option value="25" @(Model.Organization_State == "25" ? "selected" : "")> PUNJAB</option>
+                                    <option value="26" @(Model.Organization_State == "26" ? "selected" : "")> RAJASTHAN</option>
+                                    <option value="27" @(Model.Organization_State == "27" ? "selected" : "")> SIKKIM</option>
+                                    <option value="28" @(Model.Organization_State == "28" ? "selected" : "")> TAMIL NADU</option>
+                                    <option value="37" @(Model.Organization_State == "37" ? "selected" : "")> TELANGANA</option>
+                                    <option value="29" @(Model.Organization_State == "29" ? "selected" : "")> TRIPURA</option>
+
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Country</label>
+                            <div class="col-sm-4">
+                                <select class="form-control" id="Country">
+                                    @*<option value="AFG" @(Model.entGuestData.Guest_Country == "AFG" ? "selected" : "")> AFGHANISTAN</option>
+                                    <option value="ALB" @(Model.entGuestData.Guest_Country == "ALB" ? "selected" : "")> ALBANIA</option>
+                                    <option value="DZA" @(Model.entGuestData.Guest_Country == "DZA" ? "selected" : "")> ALGERIA</option>
+                                    <option value="ASM" @(Model.entGuestData.Guest_Country == "ASM" ? "selected" : "")> AMERICAN SAMOA</option>
+                                    <option value="AND" @(Model.entGuestData.Guest_Country == "AND" ? "selected" : "")> ANDORRA</option>
+                                    <option value="AGO" @(Model.entGuestData.Guest_Country == "AGO" ? "selected" : "")> ANGOLA</option>
+                                    <option value="AIA" @(Model.entGuestData.Guest_Country == "AIA" ? "selected" : "")> ANGUILLA</option>
+                                    <option value="ATA" @(Model.entGuestData.Guest_Country == "ATA" ? "selected" : "")> ANTARCTICA</option>
+                                    <option value="ATG" @(Model.entGuestData.Guest_Country == "ATG" ? "selected" : "")> ANTIGUA AND BARBUDA</option>
+                                    <option value="ARG" @(Model.entGuestData.Guest_Country == "ARG" ? "selected" : "")> ARGENTINA</option>
+                                    <option value="ARM" @(Model.entGuestData.Guest_Country == "ARM" ? "selected" : "")> ARMENIA</option>
+                                    <option value="ABW" @(Model.entGuestData.Guest_Country == "ABW" ? "selected" : "")> ARUBA</option>
+                                    <option value="AUS" @(Model.entGuestData.Guest_Country == "AUS" ? "selected" : "")> AUSTRALIA</option>
+                                    <option value="AUT" @(Model.entGuestData.Guest_Country == "AUT" ? "selected" : "")> AUSTRIA</option>
+                                    <option value="AZE" @(Model.entGuestData.Guest_Country == "AZE" ? "selected" : "")> AZERBAIJAN</option>
+                                    <option value="BHS" @(Model.entGuestData.Guest_Country == "BHS" ? "selected" : "")> BAHAMAS</option>
+                                    <option value="BHR" @(Model.entGuestData.Guest_Country == "BHR" ? "selected" : "")> BAHRAIN</option>
+                                    <option value="BGD" @(Model.entGuestData.Guest_Country == "BGD" ? "selected" : "")> BANGLADESH</option>
+                                    <option value="BRB" @(Model.entGuestData.Guest_Country == "BRB" ? "selected" : "")> BARBADOS</option>
+                                    <option value="BLR" @(Model.entGuestData.Guest_Country == "BLR" ? "selected" : "")> BELARUS</option>
+                                    <option value="BEL" @(Model.entGuestData.Guest_Country == "BEL" ? "selected" : "")> BELGIUM</option>
+                                    <option value="BLZ" @(Model.entGuestData.Guest_Country == "BLZ" ? "selected" : "")>BELIZE</option>
+                                    <option value="BEN" @(Model.entGuestData.Guest_Country == "BEN" ? "selected" : "")>BENIN</option>
+                                    <option value="BMU" @(Model.entGuestData.Guest_Country == "BMU" ? "selected" : "")>BERMUDA</option>
+                                    <option value="BTN" @(Model.entGuestData.Guest_Country == "BTN" ? "selected" : "")>BHUTAN</option>
+                                    <option value="BOL" @(Model.entGuestData.Guest_Country == "BOL" ? "selected" : "")>BOLIVIA</option>
+                                    <option value="BIH" @(Model.entGuestData.Guest_Country == "BIH" ? "selected" : "")>BOSNIA AND HERZE</option>GOVINA
+                                    <option value="BWA" @(Model.entGuestData.Guest_Country == "BWA" ? "selected" : "")>BOTSWANA</option>
+                                    <option value="BVT" @(Model.entGuestData.Guest_Country == "BVT" ? "selected" : "")>BOUVET ISLAND</option>
+                                    <option value="BRA" @(Model.entGuestData.Guest_Country == "BRA" ? "selected" : "")>BRAZIL</option>
+                                    <option value="IOT" @(Model.entGuestData.Guest_Country == "IOT" ? "selected" : "")>BRITISH INDIAN OCEAN TERRITORY</option>
+                                    <option value="BRN" @(Model.entGuestData.Guest_Country == "BRN" ? "selected" : "")>BRUNEI DARUSSALAM</option>
+                                    <option value="BGR" @(Model.entGuestData.Guest_Country == "BGR" ? "selected" : "")>BULGARIA</option>
+                                    <option value="BFA" @(Model.entGuestData.Guest_Country == "BFA" ? "selected" : "")>BURKINA FASO</option>
+                                    <option value="BDI" @(Model.entGuestData.Guest_Country == "BDI" ? "selected" : "")>BURUNDI</option>
+                                    <option value="KHM" @(Model.entGuestData.Guest_Country == "KHM" ? "selected" : "")>CAMBODIA</option>
+                                    <option value="CMR" @(Model.entGuestData.Guest_Country == "CMR" ? "selected" : "")>CAMEROON</option>
+                                    <option value="CAN" @(Model.entGuestData.Guest_Country == "CAN" ? "selected" : "")>CANADA</option>
+                                    <option value="CPV" @(Model.entGuestData.Guest_Country == "CPV" ? "selected" : "")>CAPE VERDE</option>
+                                    <option value="CYM" @(Model.entGuestData.Guest_Country == "CYM" ? "selected" : "")>CAYMAN ISLANDS</option>
+                                    <option value="CAF" @(Model.entGuestData.Guest_Country == "CAF" ? "selected" : "")>CENTRAL AFRICAN REPUBLIC</option>
+                                    <option value="TCD" @(Model.entGuestData.Guest_Country == "TCD" ? "selected" : "")>CHAD</option>
+                                    <option value="CHL" @(Model.entGuestData.Guest_Country == "CHL" ? "selected" : "")>CHILE</option>
+                                    <option value="CHN" @(Model.entGuestData.Guest_Country == "CHN" ? "selected" : "")>CHINA</option>
+                                    <option value="CXR" @(Model.entGuestData.Guest_Country == "CXR" ? "selected" : "")>CHRISTMAS ISLAND</option>
+                                    <option value="CCK" @(Model.entGuestData.Guest_Country == "CCK" ? "selected" : "")>COCOS(KEELING) ISLANDS</option>
+                                    <option value="COL" @(Model.entGuestData.Guest_Country == "COL" ? "selected" : "")>COLOMBIA</option>
+                                    <option value="COM" @(Model.entGuestData.Guest_Country == "COM" ? "selected" : "")>COMOROS</option>
+                                    <option value="COG" @(Model.entGuestData.Guest_Country == "COG" ? "selected" : "")>CONGO</option>
+                                    <option value="COD" @(Model.entGuestData.Guest_Country == "COD" ? "selected" : "")>CONGO, THE DEMOCRATIC REPUBLIC OF THE</option>
+                                    <option value="COK" @(Model.entGuestData.Guest_Country == "COK" ? "selected" : "")>COOK ISLANDS</option>
+                                    <option value="CRI" @(Model.entGuestData.Guest_Country == "CRI" ? "selected" : "")>COSTA RICA</option>
+                                    <option value="CIV" @(Model.entGuestData.Guest_Country == "CIV" ? "selected" : "")>COTE D'IVOIRE</option>
+                                    <option value="HRV" @(Model.entGuestData.Guest_Country == "HRV" ? "selected" : "")>CROATIA</option>
+                                    <option value="CUB" @(Model.entGuestData.Guest_Country == "CUB" ? "selected" : "")>CUBA</option>
+                                    <option value="CYP" @(Model.entGuestData.Guest_Country == "CYP" ? "selected" : "")>CYPRUS</option>
+                                    <option value="CZE" @(Model.entGuestData.Guest_Country == "CZE" ? "selected" : "")>CZECH REPUBLIC</option>
+                                    <option value="DNK" @(Model.entGuestData.Guest_Country == "DNK" ? "selected" : "")>DENMARK</option>
+                                    <option value="DJI" @(Model.entGuestData.Guest_Country == "DJI" ? "selected" : "")>DJIBOUTI</option>
+                                    <option value="DMA" @(Model.entGuestData.Guest_Country == "DMA" ? "selected" : "")>DOMINICA</option>
+                                    <option value="DOM" @(Model.entGuestData.Guest_Country == "DOM" ? "selected" : "")>DOMINICAN REPUBLIC</option>
+                                    <option value="ECU" @(Model.entGuestData.Guest_Country == "ECU" ? "selected" : "")>ECUADOR</option>
+                                    <option value="EGY" @(Model.entGuestData.Guest_Country == "EGY" ? "selected" : "")>EGYPT</option>
+                                    <option value="SLV" @(Model.entGuestData.Guest_Country == "SLV" ? "selected" : "")>EL SALVADOR</option>
+                                    <option value="GNQ" @(Model.entGuestData.Guest_Country == "GNQ" ? "selected" : "")>EQUATORIAL GUINEA</option>
+                                    <option value="ERI" @(Model.entGuestData.Guest_Country == "ERI" ? "selected" : "")>ERITREA</option>
+                                    <option value="EST" @(Model.entGuestData.Guest_Country == "EST" ? "selected" : "")>ESTONIA</option>
+                                    <option value="ETH" @(Model.entGuestData.Guest_Country == "ETH" ? "selected" : "")>ETHIOPIA</option>
+                                    <option value="FLK" @(Model.entGuestData.Guest_Country == "FLK" ? "selected" : "")>FALKLAND ISLANDS(MALVINAS)</option>
+                                    <option value="FRO" @(Model.entGuestData.Guest_Country == "FRO" ? "selected" : "")>FAROE ISLANDS</option>
+                                    <option value="FJI" @(Model.entGuestData.Guest_Country == "FJI" ? "selected" : "")>FIJI</option>
+                                    <option value="FIN" @(Model.entGuestData.Guest_Country == "FIN" ? "selected" : "")>FINLAND</option>
+                                    <option value="FRA" @(Model.entGuestData.Guest_Country == "FRA" ? "selected" : "")>FRANCE</option>
+                                    <option value="GUF" @(Model.entGuestData.Guest_Country == "GUF" ? "selected" : "")>FRENCH GUIANA</option>
+                                    <option value="PYF" @(Model.entGuestData.Guest_Country == "PYF" ? "selected" : "")>FRENCH POLYNESIA</option>
+                                    <option value="ATF" @(Model.entGuestData.Guest_Country == "ATF" ? "selected" : "")>FRENCH SOUTHERN TERRITORIES</option>
+                                    <option value="GAB" @(Model.entGuestData.Guest_Country == "GAB" ? "selected" : "")>GABON</option>
+                                    <option value="GMB" @(Model.entGuestData.Guest_Country == "GMB" ? "selected" : "")>GAMBIA</option>
+                                    <option value="GEO" @(Model.entGuestData.Guest_Country == "GEO" ? "selected" : "")>GEORGIA</option>
+                                    <option value="DEU" @(Model.entGuestData.Guest_Country == "DEU" ? "selected" : "")>GERMANY</option>
+                                    <option value="GHA" @(Model.entGuestData.Guest_Country == "GHA" ? "selected" : "")>GHANA</option>
+                                    <option value="GIB" @(Model.entGuestData.Guest_Country == "GIB" ? "selected" : "")>GIBRALTAR</option>
+                                    <option value="GRC" @(Model.entGuestData.Guest_Country == "GRC" ? "selected" : "")>GREECE</option>
+                                    <option value="GRL" @(Model.entGuestData.Guest_Country == "GRL" ? "selected" : "")>GREENLAND</option>
+                                    <option value="GRD" @(Model.entGuestData.Guest_Country == "GRD" ? "selected" : "")>GRENADA</option>
+                                    <option value="GLP" @(Model.entGuestData.Guest_Country == "GLP" ? "selected" : "")>GUADELOUPE</option>
+                                    <option value="GUM" @(Model.entGuestData.Guest_Country == "GUM" ? "selected" : "")>GUAM</option>
+                                    <option value="GTM" @(Model.entGuestData.Guest_Country == "GTM" ? "selected" : "")>GUATEMALA</option>
+                                    <option value="GIN" @(Model.entGuestData.Guest_Country == "GIN" ? "selected" : "")>GUINEA</option>
+                                    <option value="GNB" @(Model.entGuestData.Guest_Country == "GNB" ? "selected" : "")>GUINEA - BISSAU</option>
+                                    <option value="GUY" @(Model.entGuestData.Guest_Country == "GUY" ? "selected" : "")>GUYANA</option>
+                                    <option value="HTI" @(Model.entGuestData.Guest_Country == "HTI" ? "selected" : "")>HAITI</option>
+                                    <option value="HMD" @(Model.entGuestData.Guest_Country == "HMD" ? "selected" : "")>HEARD ISLAND AND MCDONALD ISLANDS</option>
+                                    <option value="VAT" @(Model.entGuestData.Guest_Country == "VAT" ? "selected" : "")>HOLY SEE(VATICAN CITY STATE)</option>
+                                    <option value="HND" @(Model.entGuestData.Guest_Country == "HND" ? "selected" : "")>HONDURAS</option>
+                                    <option value="HKG" @(Model.entGuestData.Guest_Country == "HKG" ? "selected" : "")>HONG KONG</option>
+                                    <option value="HUN" @(Model.entGuestData.Guest_Country == "HUN" ? "selected" : "")>HUNGARY  </option>
+                                    <option value="ISL" @(Model.entGuestData.Guest_Country == "ISL" ? "selected" : "")>ICELAND  </option>*@
+                                    <option value="IND" @(Model.Organization_Country == "IND" ? "selected" : "")>INDIA    </option>
+                                    @*<option value="IDN" @(Model.entGuestData.Guest_Country == "IDN" ? "selected" : "")>INDONESIA</option>
+                                    <option value="IRN" @(Model.entGuestData.Guest_Country == "IRN" ? "selected" : "")>IRAN, ISLAMIC REPUBLIC OF</option>
+                                    <option value="IRQ" @(Model.entGuestData.Guest_Country == "IRQ" ? "selected" : "")>IRAQ</option>
+                                    <option value="IRL" @(Model.entGuestData.Guest_Country == "IRL" ? "selected" : "")>IRELAND</option>
+                                    <option value="ISR" @(Model.entGuestData.Guest_Country == "ISR" ? "selected" : "")>ISRAEL </option>
+                                    <option value="ITA" @(Model.entGuestData.Guest_Country == "ITA" ? "selected" : "")>ITALY  </option>
+                                    <option value="JAM" @(Model.entGuestData.Guest_Country == "JAM" ? "selected" : "")>JAMAICA</option>
+                                    <option value="JPN" @(Model.entGuestData.Guest_Country == "JPN" ? "selected" : "")>JAPAN  </option>
+                                    <option value="JOR" @(Model.entGuestData.Guest_Country == "JOR" ? "selected" : "")>JORDAN </option>
+                                    <option value="KAZ" @(Model.entGuestData.Guest_Country == "KAZ" ? "selected" : "")>KAZAKHSTAN</option>
+                                    <option value="KEN" @(Model.entGuestData.Guest_Country == "KEN" ? "selected" : "")>KENYA</option>
+                                    <option value="KIR" @(Model.entGuestData.Guest_Country == "KIR" ? "selected" : "")>KIRIBATI</option>
+                                    <option value="PRK" @(Model.entGuestData.Guest_Country == "PRK" ? "selected" : "")>KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF</option>
+                                    <option value="KOR" @(Model.entGuestData.Guest_Country == "KOR" ? "selected" : "")>KOREA, REPUBLIC OF</option>
+                                    <option value="KWT" @(Model.entGuestData.Guest_Country == "KWT" ? "selected" : "")>KUWAIT</option>
+                                    <option value="KGZ" @(Model.entGuestData.Guest_Country == "KGZ" ? "selected" : "")>KYRGYZSTAN</option>
+                                    <option value="LAO" @(Model.entGuestData.Guest_Country == "LAO" ? "selected" : "")>LAO PEOPLE'S DEMOCRATIC REPUBLIC</option>
+                                    <option value="LVA" @(Model.entGuestData.Guest_Country == "LVA" ? "selected" : "")>LATVIA</option>
+                                    <option value="LBN" @(Model.entGuestData.Guest_Country == "LBN" ? "selected" : "")>LEBANON</option>
+                                    <option value="LSO" @(Model.entGuestData.Guest_Country == "LSO" ? "selected" : "")>LESOTHO</option>
+                                    <option value="LBR" @(Model.entGuestData.Guest_Country == "LBR" ? "selected" : "")>LIBERIA</option>
+                                    <option value="LBY" @(Model.entGuestData.Guest_Country == "LBY" ? "selected" : "")>LIBYAN ARAB JAMAHIRIYA</option>
+                                    <option value="LIE" @(Model.entGuestData.Guest_Country == "LIE" ? "selected" : "")>LIECHTENSTEIN</option>
+                                    <option value="LTU" @(Model.entGuestData.Guest_Country == "LTU" ? "selected" : "")>LITHUANIA</option>
+                                    <option value="LUX" @(Model.entGuestData.Guest_Country == "LUX" ? "selected" : "")>LUXEMBOURG</option>
+                                    <option value="MAC" @(Model.entGuestData.Guest_Country == "MAC" ? "selected" : "")>MACAO</option>
+                                    <option value="MKD" @(Model.entGuestData.Guest_Country == "MKD" ? "selected" : "")>MACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF</option>
+                                    <option value="MDG" @(Model.entGuestData.Guest_Country == "MDG" ? "selected" : "")>MADAGASCAR</option>
+                                    <option value="MWI" @(Model.entGuestData.Guest_Country == "MWI" ? "selected" : "")>MALAWI    </option>
+                                    <option value="MYS" @(Model.entGuestData.Guest_Country == "MYS" ? "selected" : "")>MALAYSIA  </option>
+                                    <option value="MDV" @(Model.entGuestData.Guest_Country == "MDV" ? "selected" : "")>MALDIVES  </option>
+                                    <option value="MLI" @(Model.entGuestData.Guest_Country == "MLI" ? "selected" : "")>MALI      </option>
+                                    <option value="MLT" @(Model.entGuestData.Guest_Country == "MLT" ? "selected" : "")>MALTA     </option>
+                                    <option value="MHL" @(Model.entGuestData.Guest_Country == "MHL" ? "selected" : "")>MARSHALL ISLANDS</option>
+                                    <option value="MTQ" @(Model.entGuestData.Guest_Country == "MTQ" ? "selected" : "")>MARTINIQUE</option>
+                                    <option value="MRT" @(Model.entGuestData.Guest_Country == "MRT" ? "selected" : "")>MAURITANIA</option>
+                                    <option value="MUS" @(Model.entGuestData.Guest_Country == "MUS" ? "selected" : "")>MAURITIUS</option>
+                                    <option value="MYT" @(Model.entGuestData.Guest_Country == "MYT" ? "selected" : "")>MAYOTTE</option>
+                                    <option value="MEX" @(Model.entGuestData.Guest_Country == "MEX" ? "selected" : "")>MEXICO</option>
+                                    <option value="FSM" @(Model.entGuestData.Guest_Country == "FSM" ? "selected" : "")>MICRONESIA, FEDERATED STATES OF</option>
+                                    <option value="MDA" @(Model.entGuestData.Guest_Country == "MDA" ? "selected" : "")>MOLDOVA, REPUBLIC OF</option>
+                                    <option value="MCO" @(Model.entGuestData.Guest_Country == "MCO" ? "selected" : "")>MONACO</option>
+                                    <option value="MNG" @(Model.entGuestData.Guest_Country == "MNG" ? "selected" : "")>MONGOLIA</option>
+                                    <option value="MSR" @(Model.entGuestData.Guest_Country == "MSR" ? "selected" : "")>MONTSERRAT</option>
+                                    <option value="MAR" @(Model.entGuestData.Guest_Country == "MAR" ? "selected" : "")>MOROCCO</option>
+                                    <option value="MOZ" @(Model.entGuestData.Guest_Country == "MOZ" ? "selected" : "")>MOZAMBIQUE</option>
+                                    <option value="MMR" @(Model.entGuestData.Guest_Country == "MMR" ? "selected" : "")>MYANMAR</option>
+                                    <option value="NAM" @(Model.entGuestData.Guest_Country == "NAM" ? "selected" : "")>NAMIBIA</option>
+                                    <option value="NRU" @(Model.entGuestData.Guest_Country == "NRU" ? "selected" : "")>NAURU</option>
+                                    <option value="NPL" @(Model.entGuestData.Guest_Country == "NPL" ? "selected" : "")>NEPAL</option>
+                                    <option value="NLD" @(Model.entGuestData.Guest_Country == "NLD" ? "selected" : "")>NETHERLANDS</option>
+                                    <option value="ANT" @(Model.entGuestData.Guest_Country == "ANT" ? "selected" : "")>NETHERLANDS ANTILLES</option>
+                                    <option value="NCL" @(Model.entGuestData.Guest_Country == "NCL" ? "selected" : "")>NEW CALEDONIA</option>
+                                    <option value="NZL" @(Model.entGuestData.Guest_Country == "NZL" ? "selected" : "")>NEW ZEALAND</option>
+                                    <option value="NIC" @(Model.entGuestData.Guest_Country == "NIC" ? "selected" : "")>NICARAGUA</option>
+                                    <option value="NER" @(Model.entGuestData.Guest_Country == "NER" ? "selected" : "")>NIGER</option>
+                                    <option value="NGA" @(Model.entGuestData.Guest_Country == "NGA" ? "selected" : "")>NIGERIA</option>
+                                    <option value="NIU" @(Model.entGuestData.Guest_Country == "NIU" ? "selected" : "")>NIUE</option>
+                                    <option value="NFK" @(Model.entGuestData.Guest_Country == "NFK" ? "selected" : "")>NORFOLK ISLAND</option>
+                                    <option value="MNP" @(Model.entGuestData.Guest_Country == "MNP" ? "selected" : "")>NORTHERN MARIANA ISLANDS</option>
+                                    <option value="NOR" @(Model.entGuestData.Guest_Country == "NOR" ? "selected" : "")>NORWAY</option>
+                                    <option value="OMN" @(Model.entGuestData.Guest_Country == "OMN" ? "selected" : "")>OMAN</option>
+                                    <option value="PAK" @(Model.entGuestData.Guest_Country == "PAK" ? "selected" : "")>PAKISTAN</option>
+                                    <option value="PLW" @(Model.entGuestData.Guest_Country == "PLW" ? "selected" : "")>PALAU</option>
+                                    <option value="PSE" @(Model.entGuestData.Guest_Country == "PSE" ? "selected" : "")>PALESTINIAN TERRITORY, OCCUPIED</option>
+                                    <option value="PAN" @(Model.entGuestData.Guest_Country == "PAN" ? "selected" : "")>PANAMA</option>
+                                    <option value="PNG" @(Model.entGuestData.Guest_Country == "PNG" ? "selected" : "")>PAPUA NEW GUINEA</option>
+                                    <option value="PRY" @(Model.entGuestData.Guest_Country == "PRY" ? "selected" : "")>PARAGUAY</option>
+                                    <option value="PER" @(Model.entGuestData.Guest_Country == "PER" ? "selected" : "")>PERU</option>
+                                    <option value="PHL" @(Model.entGuestData.Guest_Country == "PHL" ? "selected" : "")>PHILIPPINES </option>
+                                    <option value="PCN" @(Model.entGuestData.Guest_Country == "PCN" ? "selected" : "")>PITCAIRN</option>
+                                    <option value="POL" @(Model.entGuestData.Guest_Country == "POL" ? "selected" : "")>POLAND</option>
+                                    <option value="PRT" @(Model.entGuestData.Guest_Country == "PRT" ? "selected" : "")>PORTUGAL </option>
+                                    <option value="PRI" @(Model.entGuestData.Guest_Country == "PRI" ? "selected" : "")>PUERTO RICO</option>
+                                    <option value="QAT" @(Model.entGuestData.Guest_Country == "QAT" ? "selected" : "")>QATAR</option>
+                                    <option value="REU" @(Model.entGuestData.Guest_Country == "REU" ? "selected" : "")>REUNION</option>
+                                    <option value="ROM" @(Model.entGuestData.Guest_Country == "ROM" ? "selected" : "")>ROMANIA</option>
+                                    <option value="RUS" @(Model.entGuestData.Guest_Country == "RUS" ? "selected" : "")>RUSSIAN FEDERATION</option>
+                                    <option value="RWA" @(Model.entGuestData.Guest_Country == "RWA" ? "selected" : "")>RWANDA</option>
+                                    <option value="SHN" @(Model.entGuestData.Guest_Country == "SHN" ? "selected" : "")>SAINT HELENA</option>
+                                    <option value="KNA" @(Model.entGuestData.Guest_Country == "KNA" ? "selected" : "")>SAINT KITTS AND NEVIS</option>
+                                    <option value="LCA" @(Model.entGuestData.Guest_Country == "LCA" ? "selected" : "")>SAINT LUCIA</option>
+                                    <option value="SPM" @(Model.entGuestData.Guest_Country == "SPM" ? "selected" : "")>SAINT PIERRE AND MIQUELON</option>
+                                    <option value="VCT" @(Model.entGuestData.Guest_Country == "VCT" ? "selected" : "")>SAINT VINCENT AND THE GRENADINES</option>
+                                    <option value="WSM" @(Model.entGuestData.Guest_Country == "WSM" ? "selected" : "")>SAMOA</option>
+                                    <option value="SMR" @(Model.entGuestData.Guest_Country == "SMR" ? "selected" : "")>SAN MARINO</option>
+                                    <option value="STP" @(Model.entGuestData.Guest_Country == "STP" ? "selected" : "")>SAO TOME AND PRINCIPE</option>
+                                    <option value="SAU" @(Model.entGuestData.Guest_Country == "SAU" ? "selected" : "")>SAUDI ARABIA</option>
+                                    <option value="SEN" @(Model.entGuestData.Guest_Country == "SEN" ? "selected" : "")>SENEGAL</option>
+                                    <option value="SCG" @(Model.entGuestData.Guest_Country == "SCG" ? "selected" : "")>SERBIA AND MONTENEGRO</option>
+                                    <option value="SYC" @(Model.entGuestData.Guest_Country == "SYC" ? "selected" : "")>SEYCHELLES</option>
+                                    <option value="SLE" @(Model.entGuestData.Guest_Country == "SLE" ? "selected" : "")>SIERRA LEONE</option>
+                                    <option value="SGP" @(Model.entGuestData.Guest_Country == "SGP" ? "selected" : "")>SINGAPORE</option>
+                                    <option value="SVK" @(Model.entGuestData.Guest_Country == "SVK" ? "selected" : "")>SLOVAKIA</option>
+                                    <option value="SVN" @(Model.entGuestData.Guest_Country == "SVN" ? "selected" : "")>SLOVENIA</option>
+                                    <option value="SLB" @(Model.entGuestData.Guest_Country == "SLB" ? "selected" : "")>SOLOMON ISLANDS</option>
+                                    <option value="SOM" @(Model.entGuestData.Guest_Country == "SOM" ? "selected" : "")>SOMALIA</option>
+                                    <option value="ZAF" @(Model.entGuestData.Guest_Country == "ZAF" ? "selected" : "")>SOUTH AFRICA</option>
+                                    <option value="SGS" @(Model.entGuestData.Guest_Country == "SGS" ? "selected" : "")>SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS</option>
+                                    <option value="ESP" @(Model.entGuestData.Guest_Country == "ESP" ? "selected" : "")>SPAIN</option>
+                                    <option value="LKA" @(Model.entGuestData.Guest_Country == "LKA" ? "selected" : "")>SRI LANKA</option>
+                                    <option value="SDN" @(Model.entGuestData.Guest_Country == "SDN" ? "selected" : "")>SUDAN</option>
+                                    <option value="SUR" @(Model.entGuestData.Guest_Country == "SUR" ? "selected" : "")>SURINAME</option>
+                                    <option value="SJM" @(Model.entGuestData.Guest_Country == "SJM" ? "selected" : "")>SVALBARD AND JAN MAYEN</option>
+                                    <option value="SWZ" @(Model.entGuestData.Guest_Country == "SWZ" ? "selected" : "")>SWAZILAND</option>
+                                    <option value="SWE" @(Model.entGuestData.Guest_Country == "SWE" ? "selected" : "")>SWEDEN</option>
+                                    <option value="CHE" @(Model.entGuestData.Guest_Country == "CHE" ? "selected" : "")>SWITZERLAND</option>
+                                    <option value="SYR" @(Model.entGuestData.Guest_Country == "SYR" ? "selected" : "")>SYRIAN ARAB REPUBLIC</option>
+                                    <option value="TWN" @(Model.entGuestData.Guest_Country == "TWN" ? "selected" : "")>TAIWAN, PROVINCE OF CHINA</option>
+                                    <option value="TJK" @(Model.entGuestData.Guest_Country == "TJK" ? "selected" : "")>TAJIKISTAN</option>
+                                    <option value="TZA" @(Model.entGuestData.Guest_Country == "TZA" ? "selected" : "")>TANZANIA, UNITED REPUBLIC OF</option>
+                                    <option value="THA" @(Model.entGuestData.Guest_Country == "THA" ? "selected" : "")>THAILAND</option>
+                                    <option value="TLS" @(Model.entGuestData.Guest_Country == "TLS" ? "selected" : "")>TIMOR-LESTE</option>
+                                    <option value="TGO" @(Model.entGuestData.Guest_Country == "TGO" ? "selected" : "")>TOGO</option>
+                                    <option value="TKL" @(Model.entGuestData.Guest_Country == "TKL" ? "selected" : "")>TOKELAU</option>
+                                    <option value="TON" @(Model.entGuestData.Guest_Country == "TON" ? "selected" : "")>TONGA</option>
+                                    <option value="TTO" @(Model.entGuestData.Guest_Country == "TTO" ? "selected" : "")>TRINIDAD AND TOBAGO</option>
+                                    <option value="TUN" @(Model.entGuestData.Guest_Country == "TUN" ? "selected" : "")>TUNISIA</option>
+                                    <option value="TUR" @(Model.entGuestData.Guest_Country == "TUR" ? "selected" : "")>TURKEY</option>
+                                    <option value="TKM" @(Model.entGuestData.Guest_Country == "TKM" ? "selected" : "")>TURKMENISTAN</option>
+                                    <option value="TCA" @(Model.entGuestData.Guest_Country == "TCA" ? "selected" : "")>TURKS AND CAICOS ISLANDS</option>
+                                    <option value="TUV" @(Model.entGuestData.Guest_Country == "TUV" ? "selected" : "")>TUVALU</option>
+                                    <option value="UGA" @(Model.entGuestData.Guest_Country == "UGA" ? "selected" : "")>UGANDA</option>
+                                    <option value="UKR" @(Model.entGuestData.Guest_Country == "UKR" ? "selected" : "")>UKRAINE</option>
+                                    <option value="ARE" @(Model.entGuestData.Guest_Country == "ARE" ? "selected" : "")>UNITED ARAB EMIRATES</option>
+                                    <option value="GBR" @(Model.entGuestData.Guest_Country == "GBR" ? "selected" : "")>UNITED KINGDOM</option>
+                                    <option value="USA" @(Model.entGuestData.Guest_Country == "USA" ? "selected" : "")>UNITED STATES</option>
+                                    <option value="UMI" @(Model.entGuestData.Guest_Country == "UMI" ? "selected" : "")>UNITED STATES MINOR OUTLYING ISLANDS</option>
+                                    <option value="URY" @(Model.entGuestData.Guest_Country == "URY" ? "selected" : "")>URUGUAY</option>
+                                    <option value="UZB" @(Model.entGuestData.Guest_Country == "UZB" ? "selected" : "")>UZBEKISTAN</option>
+                                    <option value="VUT" @(Model.entGuestData.Guest_Country == "VUT" ? "selected" : "")>VANUATU</option>
+                                    <option value="VEN" @(Model.entGuestData.Guest_Country == "VEN" ? "selected" : "")>VENEZUELA</option>
+                                    <option value="VNM" @(Model.entGuestData.Guest_Country == "VNM" ? "selected" : "")>VIET NAM</option>
+                                    <option value="VGB" @(Model.entGuestData.Guest_Country == "VGB" ? "selected" : "")>VIRGIN ISLANDS, BRITISH</option>
+                                    <option value="VIR" @(Model.entGuestData.Guest_Country == "VIR" ? "selected" : "")>VIRGIN ISLANDS, U.S.</option>
+                                    <option value="WLF" @(Model.entGuestData.Guest_Country == "WLF" ? "selected" : "")>WALLIS AND FUTUNA</option>
+                                    <option value="ESH" @(Model.entGuestData.Guest_Country == "ESH" ? "selected" : "")>WESTERN SAHARA</option>
+                                    <option value="YEM" @(Model.entGuestData.Guest_Country == "YEM" ? "selected" : "")>YEMEN</option>
+                                    <option value="ZMB" @(Model.entGuestData.Guest_Country == "ZMB" ? "selected" : "")>ZAMBIA</option>
+                                    <option value="ZWE" @(Model.entGuestData.Guest_Country == "ZWE" ? "selected" : "")> ZIMBABWE</option>*@
+                                </select>
+                            </div>
+                            <label class="col-sm-2 control-label">Zip</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="Zip" placeholder="Enter Zip Code" value="@Model.Organization_PinCode">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Email<span class="red">*</span></label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="Email" placeholder="Enter Email" value="@Model.organization_email">
+                              <span id="validMail" class="requiredv" style="color:red"></span>
+                            </div>
+                            <label class="col-sm-2 control-label">Website</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="Website" placeholder="Enter Website" value="@Model.organization_web">
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    @*<button type="button" id="btn-loading" data-loading-text="Please wait..." class="btn btn-lg btn-primary">Large loading State</button>*@
+                                    <button type="button"  id="btn-loading" data-loading-text="Please wait..." class="btn btn-primary btnAddOrganization">Submit</button>
+                                    <button type="submit" class="btn">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('ul#masters').addClass('in');
+    $('ul#reportlist').removeClass('in');
+    $('ul#guestslist').removeClass('in');
+</script>

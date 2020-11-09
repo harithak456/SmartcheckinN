@@ -1,0 +1,157 @@
+﻿
+@{
+    ViewBag.Title = "FRROReport";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    List<ZS_SmartCheckIn.Models.Entity.Ent_GuestData> Guestlist = ViewBag.Guestlist;
+    var i = 0;
+}
+<style>
+    .radiofilter {
+        margin: 0 10px 0 10px !important;
+        position: inherit !important;
+    }
+</style>
+<script src="../../Scripts/ajax/report.js"></script>
+<!-- BEGIN BREADCRUMB -->
+<div class="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <a href="#">Reports</a>
+        </li>
+        <li class="active">FRRO Report</li>
+    </ul>
+</div>
+<!-- END BREADCRUMB -->
+
+<div class="page-header title">
+    <!-- PAGE TITLE ROW -->
+    <h1>
+        FRRO Report
+    </h1>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+
+        <!-- Start jQuery Datatable -->
+        <div class="well white">
+            <div id="ft-5" class="panel-collapse collapse in">
+                <div class="portlet-body">
+
+                    <form role="form" method="post">
+                        <div class="row">
+                            <div class="col-lg-2 col-sm-6">
+                                <div class="form-group">
+                                    <label>From</label>
+                                    <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input1" data-link-format="yyyy-mm-dd">
+                                        <span class="input-group-addon">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </span>
+                                        <input class="form-control" />
+                                    </div>
+                                    <input type="hidden" id="dtp_input1" value="" /><br />
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-6">
+                                <div class="form-group">
+                                    <label>To</label>
+                                    <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                                        <span class="input-group-addon">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </span>
+                                        <input class="form-control" />
+                                    </div>
+                                    <input type="hidden" id="dtp_input2" value="" /><br />
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <button type="button" class="btn btn-info btnFRROReport" style="margin-top:2%;">Search</button>
+                            </div>
+                        </div>
+                        <div class="form-group" style="display:none">
+                            <div class="tcb">
+                                <label class="tcb-inline">
+                                    <input type="radio" name="Status" value="" class="tc ">
+                                    <span class="labels">All Guest</span>
+                                </label>
+                                <label class="tcb-inline">
+                                    <input type="radio" name="Status" value="0" class="tc radiofilter">
+                                    <span class="labels">FRRO Pending</span>
+                                </label>
+                                <label class="tcb-inline ">
+                                    <input type="radio" name="Status" value="2" class="tc radiofilter">
+                                    <span class="labels">Checked-In</span>
+                                </label>
+                                <label class="tcb-inline ">
+                                    <input type="radio" name="Status" value="3" class="tc radiofilter">
+                                    <span class="labels">Checked-Out</span>
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+
+        <div class="well white">
+
+            <table id="SampleDT" class="datatable table table-hover table-striped table-bordered tc-table">
+                <thead>
+                    <tr>
+                        <th>SlNo</th>
+                        <th data-class="expand">Name</th>
+                        <th data-hide="phone,tablet">Reference ID</th>
+                        <th>Status</th>
+                        <th style="display:none">Is_Active</th>
+                        <th data-hide="phone,tablet">CheckIn Date</th>
+                        <th data-hide="phone,tablet">CheckIn User</th>
+                        <th data-hide="phone,tablet">CheckOut Date</th>
+                        <th data-hide="phone,tablet">CheckOut User</th>
+
+
+                    </tr>
+                </thead>
+                <tbody id="reportBody">
+                    @foreach (var item in Guestlist)
+                    {
+                        i++;
+                        <tr id="@item.Guest_Code">
+                            <td>@i</td>
+                            <td>@item.Guest_Firstname</td>
+                            <td>@item.guest_FrroChellan</td>
+                            @if (item.Guest_PassToFRRO == 0 || item.Guest_PassToFRRO == 1)
+                            {
+                                <td><span class="label label-terminated arrowed-in-right arrowed-in">FRRO Pending</span></td>
+                            }
+                            else if (item.Guest_PassToFRRO == 2)
+                            {
+                                <td><span class="label label-pending arrowed-in-right arrowed-in">Checked-In</span></td>
+                            }
+                            else if (item.Guest_PassToFRRO == 3)
+                            {
+                                <td><span class="label label-suspended arrowed-in-right arrowed-in">Checked-Out</span></td>
+                            }
+                            <td style="display:none">@item.Guest_PassToFRRO</td>
+                            <td>@item.Guest_FrroEntryDate</td>
+                            <td>@item.Guest_FrroEntryUserName</td>
+                            <td>@item.Guest_FrroCheckOutDate</td>
+                            <td>@item.Guest_FrroCheckOutUserName</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- End jQuery Datatable -->
+    </div>
+</div>
+<script>
+    $('ul#masters').removeClass('in');
+    $('ul#guestslist').removeClass('in');
+    $('ul#reportlist').addClass('in');
+</script>

@@ -1,0 +1,109 @@
+﻿
+@{
+    ViewBag.Title = "BranchList";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    List<ZS_SmartCheckIn.Models.Entity.Ent_Branch> BranchList = ViewBag.BranchList;
+    var i = 0;
+}
+<script src="../../Scripts/ajax/branch.js"></script>
+<!-- BEGIN PAGE HEADING ROW -->
+<div class="row">
+    <div class="col-lg-12">
+        <!-- BEGIN BREADCRUMB -->
+        <div class="breadcrumbs">
+            <ul class="breadcrumb">
+                <li class="active">Masters</li>
+                <li class="active">Branch List</li>
+            </ul>
+
+
+        </div>
+        <!-- END BREADCRUMB -->
+
+        <div class=" col-lg-12  page-header title">
+            <!-- PAGE TITLE ROW -->
+            <h1 class="col-md-11">Branches</h1>
+            <a href="/Master/Branch" style="float:right" class="btn btn-info right" >+New</a>
+            @*<button type="button" style="float:right" class="btn btn-info btnAddMember">Add New</button>*@
+        </div>       
+
+
+
+    </div><!-- /.col-lg-12 -->
+</div><!-- /.row -->
+<!-- END PAGE HEADING ROW -->
+<div class="messagebox"></div>
+<div class="row">
+    <div class="col-lg-12">
+
+        <!-- START YOUR CONTENT HERE -->
+        @*<div class="portlet">*@
+        <!-- /Portlet -->
+        @*<div class="portlet-heading dark">
+                <div class="portlet-title">
+                    <h4>Responsive table <small class="text-white">(css only)</small></h4>
+                </div>
+                <div class="portlet-widgets">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#basic"><i class="fa fa-chevron-down"></i></a>
+                    <span class="divider"></span>
+                    <a href="#" class="box-close"><i class="fa fa-times"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>*@
+
+
+
+        <!-- Start jQuery Datatable -->
+        @*<div class="page-header no-padding-bottom">
+                <h4>Responsive jQuery datatable<small></small></h4>
+            </div>*@
+
+        <div class="well white">
+            <table id="SampleDT" class="datatable table table-hover table-striped table-bordered tc-table">
+                <thead>
+                    <tr>
+                        <th data-class="expand">SlNo</th>
+                        <th data-hide="phone,tablet">Code</th>
+                        <th data-hide="phone,tablet">Name</th>
+                        <th data-hide="phone,tablet">Phone</th>
+                        <th data-hide="phone,tablet">City</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in BranchList)
+                    {
+                        i++;
+                        <tr id="@item.Branch_ID">
+                            <td>@i</td>
+                            <td>@item.Branch_Code</td>
+                            <td>@item.Branch_Name</td>
+                            <td>@item.Branch_Phone</td>
+                            <td>@item.Branch_City</td>
+                            <td class="col-medium center">
+                                <div class="btn-group btn-group-xs ">
+                                    <a href="/Master/Branch?branch_id=@item.Branch_ID" class="btn btn-inverse" style="margin-right:20px">
+                                    <i class="fa fa-eye icon-only"></i></a>
+                                    <a href="javascript:;" class="btn btn-danger btnDeleteBranch"><i class="fa fa-times icon-only"></i></a>
+                                    <input type="hidden" value="@item.Branch_ID" />
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- End jQuery Datatable -->
+        @*</div>*@<!-- /Portlet -->
+        <!-- END YOUR CONTENT HERE -->
+
+    </div>
+</div>
+
+<script>   
+    $('ul#masters').addClass('in'); 
+    $('ul#reportlist').removeClass('in');
+    $('ul#guestslist').removeClass('in');
+
+   
+</script>

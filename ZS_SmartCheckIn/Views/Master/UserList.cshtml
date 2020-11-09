@@ -1,0 +1,76 @@
+﻿
+@{
+    /**/
+
+    ViewBag.Title = "UserList";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    List<ZS_SmartCheckIn.Models.Entity.Ent_User> UserList = ViewBag.UserList;
+    var i = 0;
+}
+<script src="../../Scripts/ajax/user.js"></script>
+<!-- BEGIN PAGE HEADING ROW -->
+<div class="row">
+    <div class="col-lg-12">
+        <!-- BEGIN BREADCRUMB -->
+        <div class="breadcrumbs">
+            <ul class="breadcrumb">
+                <li class="active">Masters</li>
+                <li class="active">User List</li>
+            </ul>
+        </div>
+        <!-- END BREADCRUMB -->
+        <div class=" col-lg-12  page-header title">
+            <!-- PAGE TITLE ROW -->
+            <h1 class="col-md-11">Users</h1>
+            <a href="/Master/User" style="float:right" class="btn btn-info right">+New</a>        
+        </div>
+    </div><!-- /.col-lg-12 -->
+</div><!-- /.row -->
+<!-- END PAGE HEADING ROW -->
+<div class="messagebox"></div>
+<div class="row">
+    <div class="col-lg-12">
+        <!-- START YOUR CONTENT HERE -->      
+        <div class="well white">
+            <table id="SampleDT" class="datatable table table-hover table-striped table-bordered tc-table">
+                <thead>
+                    <tr>
+                        <th data-class="expand">SlNo</th>
+                        <th data-hide="phone,tablet">Name</th>
+                        <th data-hide="phone,tablet">Username</th>
+                        <th data-hide="phone,tablet">User Type</th>                        
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in UserList)
+                    {
+                        i++;
+                        <tr id="@item.User_ID">
+                            <td>@i</td>
+                            <td>@item.User_Name</td>
+                            <td>@item.User_Username</td>
+                            <td>@item.User_Type</td>                           
+                            <td class="col-medium center">
+                                <div class="btn-group btn-group-xs ">
+                                    <a href="/Master/User?User_ID=@item.User_ID" class="btn btn-inverse" style="margin-right:20px"><i class="fa fa-eye icon-only"></i></a>
+                                    <a href="javascript:;" class="btn btn-danger btnDeleteUser"><i class="fa fa-times icon-only"></i></a>
+                                    <input type="hidden" value="@item.User_ID" />
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- End jQuery Datatable -->     
+        <!-- END YOUR CONTENT HERE -->
+    </div>
+</div>
+
+
+<script>
+    $('ul#masters').addClass('in');
+    $('ul#reportlist').removeClass('in');
+    $('ul#guestslist').removeClass('in');
+</script>

@@ -1,0 +1,409 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    HttpCookie C_User_Name = Request.Cookies["User_Name"];
+    var User_Name = C_User_Name != null ? C_User_Name.Value.Split('=')[1] : "";
+    int TotalGuest = ViewBag.TotalGuest;
+    int PendingCheckIn = ViewBag.PendingCheckIn;
+    int NotVerified = ViewBag.NotVerified;
+    int NewGuest = ViewBag.NewGuest;
+    int CheckedIn = ViewBag.CheckedIn;
+    var WalkingCount = ViewBag.WalkingCount;
+    var BookingCount = ViewBag.BookingCount;
+    List<ZS_SmartCheckIn.Models.Entity.Ent_Guest> checkinList = ViewBag.checkinList;
+    List<ZS_SmartCheckIn.Models.Entity.Ent_Guest> todayCheckinList = ViewBag.todayCheckinList;
+    List<ZS_SmartCheckIn.Models.Entity.Ent_Guest> logList = ViewBag.logList;
+
+    var i = 0;
+    var k = 0;
+}
+<style>
+    .breadcrumbs1 {
+        position: fixed;
+        right: 56px;
+        z-index: 1024;
+        top: 50px;
+        text-align: right;
+    }
+</style>
+<!-- BEGIN PAGE HEADING ROW -->
+<div class="row">
+    <div class="col-lg-12">
+        <!-- BEGIN BREADCRUMB -->
+        <div class="breadcrumbs">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">Home</a>
+                </li>
+                <li class="active">Dashboard</li>
+            </ul>
+
+        </div>
+        <!-- END BREADCRUMB -->
+
+        <div class="page-header title">
+            <!-- PAGE TITLE ROW -->
+            <h1>
+                Dashboard
+                <button type="button" style="float:right;" onclick="location.href='@Url.Action("WalkInGuest", "Guest")'" class="btn btn-small btn-info">Walk-In Guest</button>
+
+            </h1>
+        </div>
+
+
+
+    </div><!-- /.col-lg-12 -->
+</div><!-- /.row -->
+<!-- END PAGE HEADING ROW -->
+<div class="row">
+    <div class="col-lg-12">
+
+        <!-- START YOUR CONTENT HERE -->
+        <div class="row">
+            <div class="col-lg-9 col-sm-12">
+
+                <div class="row">
+
+                    <div class="col-lg-4 col-sm-4">
+                        <a href="/Guest/GuestList?flag=0" class="tile-button btn btn-primary">
+                            <div class="tile-content-wrapper">
+                                <i class="fa fa-users"></i>
+                                <div class="tile-content">
+                                    @TotalGuest
+                                </div>
+                                <small>
+                                    Total Guest
+                                </small>
+                            </div>
+                        </a>
+                    </div>
+                    <input type="hidden" value="@WalkingCount" id="WalkingCount" />
+                    <input type="hidden" value="@BookingCount" id="BookingCount" />
+                    <div class="col-lg-4 col-sm-4">
+                        <a href="/Guest/GuestList?flag=3" class="tile-button btn btn-inverse">
+                            <div class="tile-content-wrapper">
+                                <i class="glyphicon glyphicon-gift"></i>
+                                <div class="tile-content">
+                                    @PendingCheckIn
+                                </div>
+                                <small>
+                                    Pending Check-In
+                                </small>
+                            </div>
+                        </a>
+                    </div>
+
+
+                    <div class="col-lg-4 col-sm-4">
+                        <a href="/Guest/GuestList?flag=2" class="tile-button btn btn-white">
+                            <div class="tile-content-wrapper">
+                                <i class="fa fa-warning text-primary"></i>
+                                <div class="tile-content text-primary">
+                                   @NotVerified
+                                </div>
+                                <small>
+                                    ID Not Verified
+                                </small>
+                            </div>
+                        </a>
+                    </div>
+
+
+                </div>
+
+                <!-- Server Info Charts .morris -->
+                <div class="portlet">
+                    <div class="portlet-heading inverse">
+                        <div class="portlet-title">
+                            <h4><i class="fa fa-line-chart"></i> Server Statics</h4>
+                        </div>
+                        <div class="portlet-widgets">
+                            @*<a id="daterange" href="javascript:;" class="tooltip-primary" data-placement="top" data-rel="tooltip" title="DateRangePicker"><i class="fa fa-calendar"></i></a>*@
+                            <span class="divider"></span>
+                            <a data-toggle="collapse" data-parent="#accordion" href="#m-charts"><i class="fa fa-chevron-down"></i></a>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div id="m-charts" class="panel-collapse collapse in">
+                        <div class="portlet-body">
+                            <div class="row">
+                                <div class="col-sm-9">
+                                    <h4>Guest Arrival-This month</h4>
+                                    <div class="chart-holder" id="morris-chart-1" style="height: 220px!important; min-height:220px;"></div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <h4>Sources</h4>
+                                    <hr class="separator" />
+
+                                    <!-- Progress bars 1-->
+                                    <div class="clearfix">
+                                        <span class="pull-left">New Guest</span>
+                                        <small class="pull-right">@NewGuest/@TotalGuest</small>
+                                    </div>
+                                    <div class="progress progress-mini">
+                                        <div class="progress-bar progress-bar-success" id="newGuestdiv"></div>
+                                    </div>
+
+                                    <!-- Progress bars 2-->
+                                    <div class="clearfix">
+                                        <span class="pull-left">ID Not Verified</span>
+                                        <small class="pull-right">@NotVerified/@TotalGuest</small>
+                                    </div>
+                                    <div class="progress progress-mini">
+                                        <div class="progress-bar progress-bar-danger" id="notVerifiedDiv"></div>
+                                    </div>
+
+                                    <!-- Progress bars 3-->
+                                    <div class="clearfix">
+                                        <span class="pull-left">Pending Check-In</span>
+                                        <small class="pull-right">@PendingCheckIn/@TotalGuest</small>
+                                    </div>
+                                    <div class="progress progress-mini">
+                                        <div class="progress-bar progress-bar-warning" id="pendingDiv"></div>
+                                    </div>
+
+                                    <!-- Progress bars 4-->
+                                    <div class="clearfix">
+                                        <span class="pull-left">CheckedIn</span>
+                                        <small class="pull-right">@CheckedIn/@TotalGuest</small>
+                                    </div>
+                                    <div class="progress progress-mini">
+                                        <div class="progress-bar progress-bar-info" id="checkedInDiv"></div>
+                                    </div>                                  
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                <!-- End Server Info Charts .morris -->
+
+          
+                <!-- Recent Activities -->
+                <div class="portlet no-border-bottom">
+                    <div class="portlet-heading dark">
+                        <div class="portlet-title">
+                            <h4><i class="fa fa-list-ul"></i> Recent Activities</h4>
+                        </div>
+                        <div class="portlet-widgets">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#recent"><i class="fa fa-chevron-down"></i></a>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div id="recent" class="panel-collapse collapse in">
+                        <div class="portlet-body no-padding">
+                            <div class="tc-tabs no-margin">                          
+                                <div class=" no-padding no-border-left no-border-right no-border-bottom">
+                                    <div>                                        
+                                        <ul class="lists">
+                                            @foreach (var item in logList)
+                                            {
+                                                <li  style="text-transform:uppercase">
+                                                    <span class="date">@item.Created_Date</span>
+                                                    @item.logaction
+                                                </li>
+                                            }                                           
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- End Recent Activities -->
+           
+            </div><!-- //col-lg-9 -->
+
+            <div class="col-lg-3 col-sm-12">
+
+                <!-- Mini Calendar -->
+                <div class="portlet hidden-widgets">
+                    <div class="portlet-heading inverse">
+                        <div class="portlet-title">
+                            <h4><i class="fa fa-calendar"></i> Calendar</h4>
+                        </div>
+                        <div class="portlet-widgets">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#mini-calendar"><i class="fa fa-chevron-down"></i></a>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div id="mini-calendar" class="panel-collapse collapse in">
+                        <div class="portlet-body">
+                            <div id="minicalendar"></div>
+
+                            <div class="space-8"></div>
+
+                            <div class="notice bg-primary marker-on-top no-margin-bottom">
+                                <h4>Today's Check-In</h4>
+                                <ul class="list-unstyled smaller-90">
+                                    @foreach (var item in todayCheckinList)
+                                    {
+                                        k++;
+                                    <li><a style="color:white" href="/Guest/ViewGuest?customercode=@item.Customer_Code">@k) Name: @item.Guest_Firstname @item.Guest_Lastname (@item.Customer_Code)</a></li>
+                                        
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Mini Calendar -->
+
+                <!-- Users List -->
+                <div class="portlet">
+                    <div class="portlet-heading inverse">
+                        <div class="portlet-title">
+                            <h4><i class="fa fa-list-alt"></i> Checked-In Guests</h4>
+                        </div>
+                        <div class="portlet-widgets">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#qclients"><i class="fa fa-chevron-down"></i></a>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div id="qclients" class="panel-collapse collapse in">
+                        <div class="portlet-body">
+                            <input type="search" class="form-control input-sm" id="input-quicklist" placeholder="Search User...">
+                            <div class="space-4"></div>
+                            <div class="quick-list">
+                                @foreach (var item in checkinList)
+                                {
+                                    if (i < 4)
+                                    {
+                                        <a href="/Guest/ViewGuest?customercode=@item.Customer_Code">
+                                            <div class="media items no-margin-top">
+                                                <span class="pull-left">
+                                                    @if (!string.IsNullOrEmpty(item.entGuestData.Guest_ProfileImage))
+                                                    {
+                                                        <img src="../../ProfileImages/@item.entGuestData.Guest_ProfileImage" style="width: 37px;height:37px;" alt="#">
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="../../assets/images/user-1.jpg" style="width: 37px;height:37px;" alt="#">
+                                                    }
+                                                </span>
+                                                <div class="media-body">
+                                                    @item.Guest_Firstname<br /><small>@item.Customer_Code</small>
+                                                </div>
+                                                <div class="tools">
+                                                    <i class="fa fa-share icon-only"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        i++;
+                                    }
+                                }
+
+                                @*<a href="profile.html">
+                            <div class="media items no-margin-top">
+                                <span class="pull-left">
+                                    <img src="../../assets/images/user-1.jpg" style="width: 37px;height:37px;" alt="#">
+                                </span>
+                                <div class="media-body">
+                                    dfsdfsdf<br /><small>e476456456456456eee</small>
+                                </div>
+                                <div class="tools">
+                                    <i class="fa fa-share icon-only"></i>
+                                </div>
+                            </div>
+                        </a>*@
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Users List -->
+            
+
+            </div><!-- //col-lg-3 -->
+        </div>
+        <!-- END YOUR CONTENT HERE -->
+
+    </div>
+</div>
+
+
+<script>    
+    var pendingper = ((@PendingCheckIn / @TotalGuest)* 100);
+         pendingper = pendingper + '%';    
+    document.getElementById('pendingDiv').style.width = pendingper;
+
+    var notverified = ((@NotVerified / @TotalGuest)* 100);
+         notverified = notverified + '%';  
+    document.getElementById('notVerifiedDiv').style.width = notverified;
+
+    var NewGuest = ((@NewGuest / @TotalGuest)* 100);
+         NewGuest = NewGuest + '%';  
+    document.getElementById('newGuestdiv').style.width = NewGuest;
+
+    var CheckedIn = ((@CheckedIn / @TotalGuest)* 100);
+         CheckedIn = CheckedIn + '%';  
+    document.getElementById('checkedInDiv').style.width = CheckedIn;
+    $(document).ready(function () {
+        // Morris chart examples.     
+      
+        var WalkingCount = $('#WalkingCount').val();
+        var splitW = WalkingCount.split(',');
+
+        var BookingCount = $('#BookingCount').val();
+        var splitB = BookingCount.split(',');
+       
+        var one = new Date();
+        one.setDate(one.getDate() - 1);
+        var two = new Date();
+        two.setDate(two.getDate() - 2);
+        var three = new Date();
+        three.setDate(three.getDate() - 3);
+        var four = new Date();
+        four.setDate(four.getDate() - 4);
+        var five = new Date();
+        five.setDate(five.getDate() - 5);
+        var six = new Date();
+        six.setDate(six.getDate() - 6);
+        var seven = new Date();
+        seven.setDate(seven.getDate() - 7);
+     
+        var day_data = [
+            //{"elapsed": "1AM", "a": 0, "b": 3},  //modified by Haritha for admin dashboard on 17-06/2020
+            //{"elapsed": "2AM", "a": 24, "b": 26},
+            //{"elapsed": "7AM", "a": 3, "b": 5},
+            //{"elapsed": "9AM", "a": 12, "b": 8},
+            //{"elapsed": "11AM", "a": 13, "b": 17},
+            //{"elapsed": "12AM", "a": 22, "b": 25},
+            //{"elapsed": "9PM", "a": 5, "b": 7}
+        
+            //last 7 days
+  
+            { "elapsed": seven.getDate() + "/" + (seven.getMonth()+1), "a": splitB[6], "b": splitW[6] },
+            { "elapsed": six.getDate() + "/" + (six.getMonth()+1), "a": splitB[5], "b": splitW[5] },
+            { "elapsed": five.getDate() + "/" + (five.getMonth()+1), "a": splitB[4], "b": splitW[4] },
+            { "elapsed": four.getDate() + "/" + (four.getMonth() + 1), "a": splitB[3], "b": splitW[3] },
+            { "elapsed": three.getDate() + "/" + (three.getMonth() + 1), "a": splitB[2], "b": splitW[2] },
+            { "elapsed": two.getDate() + "/" +( two.getMonth() + 1), "a": splitB[1], "b": splitW[1] },
+            { "elapsed": one.getDate() + "/" + (one.getMonth() + 1), "a": splitB[0], "b": splitW[0] }
+        ];
+
+        new Morris.Line({
+            element: 'morris-chart-1',
+            data: day_data,
+            xkey: 'elapsed',
+            ykeys: ['a', 'b'],
+            yLabelFormat: function (y) {
+                return y;
+            },
+            labels: ['Reserved', 'Walk-In'],
+            parseTime: false,
+            lineColors: ['#72af46', '#466baf'],
+            gridTextColor: ['#686868'],
+            lineWidth: ['2px'],
+            grid: true,
+            smooth: true,
+            resize: true,
+            hideHover: 'auto'
+        });
+    });
+</script>

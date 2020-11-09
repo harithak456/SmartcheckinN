@@ -1,0 +1,215 @@
+﻿
+@{
+    ViewBag.Title = "GuestList";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    List<ZS_SmartCheckIn.Models.Entity.Ent_Guest> Guestlist = ViewBag.Guestlist;
+    var flag=ViewBag.flag;
+    var i = 0;
+}
+<style>
+    .radiofilter {
+        margin: 0 10px 0 10px !important;
+        position:inherit !important;
+    }
+</style>
+<script src="../../Scripts/ajax/guestlist.js"></script>
+<!-- BEGIN PAGE HEADING ROW -->
+<div class="row">
+    <div class="col-lg-12">
+        <!-- BEGIN BREADCRUMB -->
+        <div class="breadcrumbs">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">Home</a>
+                </li>
+                <li class="active">Guest List</li>
+            </ul>
+
+          
+        </div>
+        <!-- END BREADCRUMB -->
+
+        <div class="page-header title">
+            <!-- PAGE TITLE ROW -->
+            <h1>Guests List</h1>
+        </div>
+
+      
+
+    </div><!-- /.col-lg-12 -->
+</div><!-- /.row -->
+<!-- END PAGE HEADING ROW -->
+<div class="messagebox"></div>
+<div class="row">
+    <div class="col-lg-12">
+
+        <!-- START YOUR CONTENT HERE -->
+        @*<div class="portlet">*@
+        <!-- /Portlet -->
+        @*<div class="portlet-heading dark">
+            <div class="portlet-title">
+                <h4>Responsive table <small class="text-white">(css only)</small></h4>
+            </div>
+            <div class="portlet-widgets">
+                <a data-toggle="collapse" data-parent="#accordion" href="#basic"><i class="fa fa-chevron-down"></i></a>
+                <span class="divider"></span>
+                <a href="#" class="box-close"><i class="fa fa-times"></i></a>
+            </div>
+            <div class="clearfix"></div>
+        </div>*@
+
+
+
+        <!-- Start jQuery Datatable -->
+      
+       
+        <div class="well white" >
+            <div class="form-group ">
+                <div class="tcb">
+                    <label class="tcb-inline">
+                        <input type="radio"  @(flag=="0"?"checked":"") name="Status"  value="0" class="tc ">
+                        <span class="labels">All Guests</span>
+                    </label>
+                    <label class="tcb-inline ">
+                        <input type="radio"  @(flag=="1"?"checked":"") name="Status" value="1"  class="tc radiofilter">
+                        <span class="labels">New Guest</span>
+                    </label>
+                    <label class="tcb-inline ">
+                        <input type="radio" @(flag=="2"?"checked":"") name="Status"  value="2" class="tc radiofilter">
+                        <span class="labels">ID Not Verified</span>
+                    </label>
+                    <label class="tcb-inline">
+                        <input type="radio" @(flag=="3"?"checked":"") name="Status"  value="3" class="tc radiofilter">
+                        <span class="labels">ID Verified</span>
+                    </label>
+                    <label class="tcb-inline">
+                        <input type="radio" @(flag=="4"?"checked":"") name="Status"  value="4" class="tc radiofilter">
+                        <span class="labels">Checked In</span>
+                    </label>
+                </div>
+            </div>
+            <table id="SampleDT" class="datatable table table-hover table-striped table-bordered tc-table">
+                <thead>
+                    <tr>
+                        <th  data-hide="phone,tablet">SlNo</th>
+                        <th data-hide="expand">Name</th>
+                        <th data-hide="phone,tablet">Arrival Date</th>
+                        <th data-hide="phone,tablet">Time</th>
+                        <th data-hide="phone,tablet">Phone</th>
+                        <th style="display:none">Is_Active</th>
+                        <th>Status</th>
+                        <th data-hide="phone,tablet">Guest Type</th>
+                        <th class="col-small center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Guestlist)
+                    {
+                        i++;
+                    <tr id="@item.Customer_Code">
+                        <td>@i</td>                     
+                        <td>
+                            @if (item.Is_Active == 1)
+                            {
+                                <a href="/Guest/Register?customercode=@item.Customer_Code">@item.Guest_Firstname</a>
+                            }
+                            else
+                            {
+                                <a href="/Guest/ViewGuest?customercode=@item.Customer_Code">@item.Guest_Firstname</a>
+                            }
+                        </td>
+                        @if (item.Is_Active == 4)
+                        {
+                            <td>@item.Checkin_Date.ToShortDateString()</td>
+                        }
+                        else
+                        {
+                            <td>@item.Arrival_Date.ToShortDateString()</td>
+                        }
+                        <td>@item.Arrival_Time</td>
+                        <td>@item.Guest_MobileNo</td>
+                        <td style="display:none">@item.Is_Active</td>
+                        @if (item.Is_Active == 1)
+                        {
+                            <td>
+                                <span class="label label-pending arrowed-in-right arrowed-in">New Guest</span>
+                            </td>
+                        }
+                        else if (item.Is_Active == 2)
+                        {
+                            <td><span class="label label-terminated arrowed-in-right arrowed-in">ID Not Verified</span></td>
+                        }
+                        else if (item.Is_Active == 3)
+                        {
+                            <td><span class="label label-suspended arrowed-in-right arrowed-in">ID Verified</span></td>
+                        }
+                        else if (item.Is_Active == 4)
+                        {
+                            <td><span class="label label-paid arrowed-in-right arrowed-in">Checked-In</span></td>
+                        }
+                        @if (item.IsWalking == 1)
+                        {
+                            <td>Walk-In Guest</td>
+                        }
+                        else
+                        {
+                            <td>Reserved Guest</td>}
+
+                        <td class="col-medium center">
+                            <div class="btn-group btn-group-xs ">
+                                @*@if (item.Is_Active == 1)
+                {
+                    <a href="/Guest/Register?customercode=@item.Customer_Code" class="btn btn-inverse" style="margin-right:20px"><i class="fa fa-pencil icon-only"></i></a>
+                }
+                else
+                {
+                    <a href="/Guest/ViewGuest?customercode=@item.Customer_Code" class="btn btn-inverse" style="margin-right:20px"><i class="fa fa-pencil icon-only"></i></a>
+                }*@
+
+                                <a href="javascript:;" class="btn btn-danger btnDelete"><i class="fa fa-times icon-only"></i></a>
+                                <input type="hidden" value="@item.Customer_Code" />
+                            </div>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- End jQuery Datatable -->
+        @*</div>*@<!-- /Portlet -->
+        <!-- END YOUR CONTENT HERE -->
+
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('input[type="radio"]').change(function () {
+            var vals = this.value;
+
+            if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent)
+                || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0, 4))) {
+                if (vals > 0) {
+                    $('table tr').hide().filter(function () {
+                        return vals.indexOf($(this).find('td:eq(1)').text()) > -1;
+                    }).show();
+                }
+                else { $('table tr').show(); }
+            }
+            else {
+                var vals = this.value;
+                if (vals > 0) {
+                    $('table tr').hide().filter(function () {
+                        return vals.indexOf($(this).find('td:eq(5)').text()) > -1;
+                    }).show();
+                }
+                else { $('table tr').show(); }
+            }
+        });
+    });  
+</script>
+
+<script>
+    $('ul#masters').removeClass('in');
+    $('ul#guestslist').removeClass('in');
+    $('ul#reportlist').addClass('in');
+</script>

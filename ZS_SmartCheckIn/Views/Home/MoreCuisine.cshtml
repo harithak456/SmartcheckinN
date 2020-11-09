@@ -1,0 +1,56 @@
+﻿@model ZS_SmartCheckIn.Models.Entity.Ent_NearbyPlaces
+@{
+
+    ViewBag.Title = "MoreCuisine";
+    Layout = "~/Views/Shared/_GuestLayout.cshtml";
+    List<ZS_SmartCheckIn.Models.Entity.Ent_Cuisine> CuisineList = ViewBag.CuisineList;
+}
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="breadcrumbs fixed">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">Home</a>
+                </li>
+                <li class="active">All Cuisines</li>
+            </ul>
+        </div>
+
+        <div class="page-header title">
+            <h1>All Cuisines</h1>
+        </div>
+
+       
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-12 well white ">
+     
+            @foreach (var item in CuisineList)
+            {
+                
+                <div class="col-lg-3 col-sm-6">
+                    <div class="pricing-table-3" style="background-image:url(../../FileUploads/Cuisine/@item.DocName); height:455px;">
+                        <span><img src="../../assets/images/veg.png" width="20%" style="float:right" /></span>
+                        <h3 class="plan-title" style="color:white; background-color:darkred; padding:5px;margin-top: 381px;">@item.CuisineName</h3>
+                    </div>
+                </div>
+               
+            }
+
+        </div>
+        <div style="float:right;">
+            <button type="button" class="btn btn-danger" onclick="BackCuisine();">Back</button>
+        </div>
+    
+
+</div>
+<script>
+    function BackCuisine() {
+        location.href = "/Home/Dashboard";
+    }
+</script>
