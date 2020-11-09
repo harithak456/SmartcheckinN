@@ -1185,6 +1185,7 @@ namespace ZS_SmartCheckIn.Controllers
                         entGuestResult.Guest_Gender = "Male";
                     }
 
+
                     //if (lines[i].Contains("Nationality"))
                     //{
                     //    string stri = Regex.Replace(lines[i], "[^A-Z]", " ");
