@@ -10,6 +10,8 @@
     var GroupLeader = ViewBag.GroupLeader;
     List<ZS_SmartCheckIn.Models.Entity.Ent_GuestData> listGuest = ViewBag.listGuest;
     var i = 0;
+    HttpCookie Ocr_Server = Request.Cookies["OcrServer"];
+    var OcrServer = Ocr_Server != null ? Ocr_Server.Value.Split('=')[1] : "https://apipro3.ocr.space/parse/image";
     var k = 0;
 }
 <script src="../../Scripts/ajax/addguestnew.js"></script>
@@ -1646,8 +1648,8 @@
         //formData.append("apikey", "2c096057dd88957");
         formData.append("apikey", "OCRK6454898A");
         $.ajax({
-            //url: 'https://api.ocr.space/parse/image',
-            url: 'https://apipro3.ocr.space/parse/image',
+            //url: 'https://apipro3.ocr.space/parse/image',
+              url: '@OcrServer',
             data: formData,
             dataType: 'json',
             cache: false,

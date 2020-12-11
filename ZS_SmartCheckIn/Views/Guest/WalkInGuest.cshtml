@@ -9,6 +9,8 @@
     var Email = ViewBag.Email;
     var Guest_Accompany = ViewBag.Guest_Accompany;
     var GroupLeader = ViewBag.GroupLeader;
+    HttpCookie Ocr_Server = Request.Cookies["OcrServer"];
+    var OcrServer = Ocr_Server != null ? Ocr_Server.Value.Split('=')[1] : "https://apipro3.ocr.space/parse/image";
     var i = 0;
 }
 
@@ -1444,9 +1446,9 @@
             formData.append("OCREngine", "2");
             //formData.append("apikey", "2c096057dd88957");
             formData.append("apikey", "OCRK6454898A");
-            $.ajax({
-                //url: 'https://api.ocr.space/parse/image',
-                url: 'https://apipro3.ocr.space/parse/image',          
+            $.ajax({               
+                //url: 'https://apipro3.ocr.space/parse/image',
+                  url: '@OcrServer',
                 data: formData,
                 dataType: 'json',
                 cache: false,
@@ -1833,9 +1835,9 @@
         formData.append("OCREngine", "2");
         //formData.append("apikey", "2c096057dd88957");
         formData.append("apikey", "OCRK6454898A");
-        $.ajax({
-            //url: 'https://api.ocr.space/parse/image',
-            url: 'https://apipro3.ocr.space/parse/image',
+        $.ajax({           
+            //url: 'https://apipro3.ocr.space/parse/image',
+              url: '@OcrServer',
             data: formData,
             dataType: 'json',
             cache: false,
@@ -1888,6 +1890,8 @@
                 else { $('li.docTab').nextAll('li').show(); }
                 document.getElementById('Address').innerHTML = data.Guest_Address != null ? data.Guest_Address : document.getElementById('Address').innerHTML;
                 document.getElementById('CardType').value = data.Guest_CardType != null ? data.Guest_CardType : document.getElementById('CardType').value;
+                console.log(43);
+                console.log(data.Guest_DocumentNo);
                 document.getElementById('DocumentNo').value = data.Guest_DocumentNo != null ? data.Guest_DocumentNo : document.getElementById('DocumentNo').value;
                 //document.getElementById('CountryofIssue').value = data.Guest_CountryofIssue != null ? data.Guest_CountryofIssue : document.getElementById('CountryofIssue').value;
                 document.getElementById('DateOfIssue').value = data.Guest_DateOfIssue != null ? data.Guest_DateOfIssue : document.getElementById('DateOfIssue').value;
@@ -2435,6 +2439,42 @@
                     flag = false; visa = false;
                 }
             }
+            else {
+
+                var today = new Date();
+                var dd = today.getDate();
+                var mm = today.getMonth() + 1;
+                var yyyy = today.getFullYear();
+                if (dd < 10) {
+                    dd = '0' + dd;
+                }
+                if (mm < 10) {
+                    mm = '0' + mm;
+                }
+                var Today = dd + '/' + mm + '/' + yyyy;
+
+                var DocumentNo = $("#DocumentNo").val();
+                var DateOfIssue = $("#DateOfIssue").val();
+                var ExpiryDate = $("#ExpiryDate").val();
+                var regExp = /(\d{1,2})\/(\d{1,2})\/(\d{2,4})/;
+
+
+                if (ExpiryDate != '' && ExpiryDate != null) {
+                    if (parseInt(ExpiryDate.replace(regExp, "$3$2$1")) < parseInt(Today.replace(regExp, "$3$2$1"))) {   //if issue greater than today
+                        $("#validExpiryDate").html("Card Expired.");
+                        flag = false; card = false;
+                    }
+                }
+
+                if (DateOfIssue != '' && DateOfIssue != null) {
+                    if (parseInt(Today.replace(regExp, "$3$2$1")) < parseInt(DateOfIssue.replace(regExp, "$3$2$1"))) {   //if issue greater than today
+                        $("#validDateOfIssue").html("Enter Valid Date Of Issue.");
+                        flag = false; card = false;
+                    }
+                }
+            }
+
+
 
             if (card == false) {
                 //$('li.docTab').nextAll('li').attr("style", "display: none !important");
@@ -2872,8 +2912,8 @@
             //formData.append("apikey", "2c096057dd88957");
             formData.append("apikey", "OCRK6454898A");
             $.ajax({
-                //url: 'https://api.ocr.space/parse/image',
-                url: 'https://apipro3.ocr.space/parse/image',
+                //url: 'https://apipro3.ocr.space/parse/image',
+                  url: '@OcrServer',
                 data: formData,
                 dataType: 'json',
                 cache: false,

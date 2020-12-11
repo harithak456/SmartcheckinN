@@ -120,6 +120,56 @@ namespace ZS_SmartCheckIn.Controllers
         }
         #endregion
 
+        #region ServerMaster
+        public ActionResult ServerMaster()
+        {
+
+            return View();
+        }
+
+        public int UpdateOCRServer(int OCRServer)
+        {
+            int result = 0;
+            SafeTransaction trans = new SafeTransaction();
+
+            result = balMaster.UpdateOCRServer(OCRServer, trans);
+            if (result > 0)
+            {
+                trans.Commit();
+
+
+                HttpCookie OcrValue = new HttpCookie("OcrValue");
+                OcrValue.Values["OcrValue"] = Convert.ToString(OCRServer);
+                OcrValue.Expires = DateTime.Now.AddHours(1);
+                Response.Cookies.Add(OcrValue);
+
+                HttpCookie OcrServer = new HttpCookie("OcrServer");
+                if (OCRServer == 1)
+                {
+                    OcrServer.Values["OcrServer"] = "https://apipro1.ocr.space/parse/image";
+                }
+                else if (OCRServer == 2)
+                {
+                    OcrServer.Values["OcrServer"] = "https://apipro2.ocr.space/parse/image";
+                }
+                else
+                {
+                    OcrServer.Values["OcrServer"] = "https://apipro3.ocr.space/parse/image";
+                }
+
+                OcrServer.Expires = DateTime.Now.AddHours(1);
+                Response.Cookies.Add(OcrServer);
+
+            }
+            else
+            {
+                trans.Rollback();
+            }
+            return result;
+        }
+
+        #endregion
+
         #region FRRO
         public ActionResult FRRO()
         {

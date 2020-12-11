@@ -1,0 +1,115 @@
+﻿
+@{
+    ViewBag.Title = "ServerMaster";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+
+    HttpCookie OcrValue = Request.Cookies["OcrValue"];
+    var OcrServer = OcrValue != null ? OcrValue.Value.Split('=')[1] : "3";
+
+}
+<script src="../../Scripts/ajax/frro.js"></script>
+<!-- BEGIN BREADCRUMB -->
+<div class="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <a href="#">Masters</a>
+        </li>
+        <li class="active">Server Master</li>
+    </ul>
+</div>
+<!-- END BREADCRUMB -->
+
+<div class="page-header title">
+    <!-- PAGE TITLE ROW -->
+    <h1>
+        Server Master
+        @*<span class="sub-title">general elements, css only</span>*@
+    </h1>
+</div>
+
+
+<!-- START YOUR CONTENT HERE -->
+<div class="messagebox"></div>
+<div class="row" id="myDiv">
+    <div class="col-lg-12">
+        <div class="portlet">
+
+            <div id="f-3" class="panel-collapse collapse in">
+                <div class="portlet">
+                    <div class="portlet-heading dark">
+                        <div class="portlet-title">
+                            <h4>OCR Server</h4>
+                        </div>
+                        <div class="portlet-widgets">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#f-2"><i class="fa fa-chevron-down"></i></a>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div id="f-2" class="panel-collapse collapse in">
+                        <div class="portlet-body">
+                            <form class="form-horizontal" role="form" method="post">
+                                <div class="form-group">
+                                    <label class="col-sm-6 control-label">Select the Server to which the OCR needs to be connected</label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label"></label>
+                                    <div class="col-sm-9">
+                                        <div class="tcb">
+                                            <label class="tcb-inline">
+                                                <input type="radio" name="ocrradio" id="optionsRadios1" @(OcrServer == "1" ? "checked" : "") value="1" class="tc">
+                                                <span class="labels">OCR 1</span>
+                                            </label>
+                                            <label class="tcb-inline">
+                                                <input type="radio" name="ocrradio" id="optionsRadios2" @(OcrServer == "2" ? "checked" : "") value="2" class="tc">
+                                                <span class="labels">OCR 2</span>
+                                            </label>
+                                            <label class="tcb-inline">
+                                                <input type="radio" name="ocrradio" id="optionsRadios3" @(OcrServer == "3" ? "checked" : "") value="3" class="tc">
+                                                <span class="labels">OCR 3</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-4 col-sm-10">
+                                            <button type="button" id="btn-loading" data-loading-text="Please wait..." class="btn btn-primary btnAddOCR">Submit</button>
+                                            <button type="submit" class="btn">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+
+                            <div id="alerts" class="panel-collapse collapse in">
+                                <div class="portlet-body">
+
+                                    <div class="alert note note-success">
+                                        <h4><i class="fa fa-tags"></i> Note :</h4>
+                                        <hr class="separator">
+                                        <p>
+                                            In case if the OCR takes more than the  normal timing to capture the details from the ID card (normal timings - 5-10 seconds),
+                                            or if the OCR function does not work, kindly change the current server to another one and redo the OCR function for proper functioning of the application.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $('ul#masters').addClass('in');
+    $('ul#guestslist').removeClass('in');
+    $('ul#reportlist').removeClass('in');
+</script>
+
+

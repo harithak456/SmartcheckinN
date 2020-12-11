@@ -63,4 +63,39 @@
         }
     });
 
+
+    $('.btnAddOCR').click(function () {
+        var ocrServer = $("input[name='ocrradio']:checked").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/Master/UpdateOCRServer",
+            data: "{'OCRServer':'" + ocrServer + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            beforeSend: function () { $("#loader").css("display", "block"); },
+            complete: function () { $("#loader").css("display", "none"); },
+            success: OnSuccessSaveCall,
+            error: OnErrorSaveCall
+        });
+
+        function OnSuccessSaveCall(data) {
+            if (data > "0") {
+                $(window).scrollTop(0);
+                $(".messagebox").append('<div class="well bg-success msg"><strong> Success!</strong> Updated Successfully.</div>');
+                $(".msg").delay(8000).fadeOut(800);
+            }
+            else {
+                $(window).scrollTop(0);
+                $(".messagebox").append('<div class="well bg-primary msg"><strong> Error!</strong> Failed To Update.</div>');
+                $(".msg").delay(4000).fadeOut(800);
+            }
+        }
+        function OnErrorSaveCall() {
+            $(window).scrollTop(0);
+            $(".messagebox").append('<div class="well bg-primary msg"><strong> Error!</strong> Failed To Update.</div>');
+            $(".msg").delay(4000).fadeOut(800);
+        }
+    });
+
 });

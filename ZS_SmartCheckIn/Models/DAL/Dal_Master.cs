@@ -372,6 +372,47 @@ namespace ZS_SmartCheckIn.Models.DAL
         }
         #endregion
 
+        #region ServerMaster
+        public int UpdateOCRServer(int OcrServer, SafeTransaction trans)
+        {
+            int dataresult = 0;
+            try
+            {
+                if (con.State == ConnectionState.Closed)
+                {
+                    con.Open();
+                }
+
+                using (SqlCommand cmd = new SqlCommand("ZS_UpdateOcrServer", trans.DatabaseConnection, trans.Transaction))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    HttpCookie BranchID = HttpContext.Current.Request.Cookies["Branch_ID"];
+                    cmd.Parameters.Add(new SqlParameter("@branch_id", Convert.ToInt32(BranchID.Value.Split('=')[1])));
+                    cmd.Parameters.Add(new SqlParameter("@OcrServer", OcrServer));
+                    try
+                    {
+                        dataresult = Convert.ToInt32(cmd.ExecuteScalar());
+                        if (dataresult > 0)
+                        {
+                            cmd.Dispose();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        dataresult = -2;
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                dataresult = -2;
+            }
+            finally { con.Close(); }
+            return dataresult;
+        }
+        #endregion
+
         #region FRROMaster
         public int SaveFRRO(Ent_Branch ent, SafeTransaction trans)
         {

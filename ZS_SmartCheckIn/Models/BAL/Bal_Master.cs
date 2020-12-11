@@ -103,6 +103,24 @@ namespace ZS_SmartCheckIn.Models.BAL
         }
         #endregion
 
+        #region ServerMaster
+        public int UpdateOCRServer(int OcrServer, SafeTransaction trans)
+        {
+            int dataResult = 0;
+            try
+            {
+                Dal_Master dal = new Dal_Master();
+                dataResult = dal.UpdateOCRServer(OcrServer, trans);
+                return dataResult;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+        #endregion
+
+
         #region FRROMaster
         public int SaveFRRO(Ent_Branch entGuest, SafeTransaction trans)
         {

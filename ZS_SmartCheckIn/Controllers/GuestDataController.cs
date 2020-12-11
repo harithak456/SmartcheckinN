@@ -552,10 +552,13 @@ namespace ZS_SmartCheckIn.Controllers
                         byte[] imageData = System.IO.File.ReadAllBytes(ImagePath);
                         form.Add(new ByteArrayContent(imageData, 0, imageData.Length), "image", "image.jpg");
                     }
-                 
 
-                    //HttpResponseMessage response = await httpClient.PostAsync("https://api.ocr.space/Parse/Image", form);                    
-                    HttpResponseMessage response = await httpClient.PostAsync("https://apipro3.ocr.space/parse/image", form);                    
+
+                    HttpCookie Ocr_Server = Request.Cookies["OcrServer"];
+                    var OcrServer = Ocr_Server != null ? Ocr_Server.Value.Split('=')[1] : "https://apipro3.ocr.space/parse/image";
+
+                    //HttpResponseMessage response = await httpClient.PostAsync("https://apipro3.ocr.space/parse/image", form);
+                    HttpResponseMessage response = await httpClient.PostAsync(OcrServer, form);
 
                     string strContent = "";
                     using (HttpContent content = response.Content)
@@ -623,10 +626,13 @@ namespace ZS_SmartCheckIn.Controllers
                     }
 
 
-                    //HttpResponseMessage response = await httpClient.PostAsync("https://api.ocr.space/Parse/Image", form);
-                    HttpResponseMessage response = await httpClient.PostAsync("https://apipro3.ocr.space/parse/image", form);
+                HttpCookie Ocr_Server = Request.Cookies["OcrServer"];
+                var OcrServer = Ocr_Server != null ? Ocr_Server.Value.Split('=')[1] : "https://apipro3.ocr.space/parse/image";
 
-                    string strContent = "";
+                //HttpResponseMessage response = await httpClient.PostAsync("https://apipro3.ocr.space/parse/image", form);
+                HttpResponseMessage response = await httpClient.PostAsync(OcrServer, form);
+
+                string strContent = "";
                     using (HttpContent content = response.Content)
                     {
                         // strContent = await content.ReadAsStringAsync().ConfigureAwait(false);
@@ -1130,34 +1136,24 @@ namespace ZS_SmartCheckIn.Controllers
         private void GetMaurtiusId(string[] lines)
         {
             try
-            {
-                Regex date = new Regex(@"\d{2}/\d{2}/\d{4}");
-                Regex regCharacter = new Regex("[*'\",_&:#^@]");
-                Regex docNo1 = new Regex(@"\d{2}/\d{3,4}/\d{4}");
-                Regex docNo2 = new Regex(@"\d{1}/\d{4,5}/\d{4}");
+            {                     
                 entGuestResult.Guest_State = "Kerala";
                 entGuestResult.Guest_Country = "IND";
                 entGuestResult.Guest_CountryofIssue = "India";
                 entGuestResult.Guest_Nationality = "IND";
                 for (int i = 0; i < lines.Count(); i++)
-                {
-                    Match doc1 = docNo1.Match(lines[i]);
-                    Match doc2 = docNo2.Match(lines[i]);
-                    if (doc1.Success)
+                {                  
+                    if (i == 2 && lines[i].Contains("No"))
                     {
-                        entGuestResult.Guest_DocumentNo = doc1.Value;
+                        string[] splitName = lines[i].ToString().Split(' ');
+                        splitName = splitName.Where(x => !string.IsNullOrEmpty(x)).ToArray();
+                        entGuestResult.Guest_DocumentNo = splitName[2];                    
                     }
-                    else if (doc2.Success)
-                    {
-                        entGuestResult.Guest_DocumentNo = doc2.Value;
-                    }
-
                     if (lines[i].ToLower().Contains("surname"))
                     {
-                        string stri = Regex.Replace(lines[i], "Surname", "");
-                        string[] splitName = stri.ToString().Split(' ');
+                        string[] splitName = lines[i].ToString().Split(' ');
                         splitName = splitName.Where(x => !string.IsNullOrEmpty(x)).ToArray();                      
-                        entGuestResult.Guest_Lastname = splitName[0];
+                        entGuestResult.Guest_Lastname = splitName[1];
                         GotData = 1;
                     }
                     if (lines[i].ToLower().Contains("other name"))
@@ -1173,8 +1169,8 @@ namespace ZS_SmartCheckIn.Controllers
                     {
                         string[] splitName = lines[i].ToString().Split(' ');
                         splitName = splitName.Where(x => !string.IsNullOrEmpty(x)).ToArray();
-                        string dob = splitName[1] + " " + splitName[2] + " " + splitName[3];
-                        entGuestResult.Guest_DOB = dob;
+                        string dob = splitName[1] + " " + splitName[2] + " " + splitName[3].Substring(0,4);
+                        entGuestResult.Guest_DOB = Convert.ToDateTime(dob).ToString("dd/MM/yyyy");
                     }
                     if (lines[i].ToLower().Contains("female") )
                     {
@@ -1186,27 +1182,31 @@ namespace ZS_SmartCheckIn.Controllers
                     }
 
 
-                    //if (lines[i].Contains("Nationality"))
-                    //{
-                    //    string stri = Regex.Replace(lines[i], "[^A-Z]", " ");
-                    //    string[] splitName = stri.ToString().Split(' ');
-                    //    splitName = splitName.Where(x => !string.IsNullOrEmpty(x)).ToArray();
-                    //    entGuestResult.Guest_Firstname = splitName[1];
-                    //    GotData = 1;
-                    //    entGuestResult.Guest_Lastname = splitName[2];
-                    //}
-
-                    if (lines[i].Contains("Gender"))
+                    if (lines[i].ToLower().Contains("nationality"))
                     {
-                        string linGender = string.Concat(lines[i + 1].Where(x => x >= 'A' && x <= 'Z'));
-                        string gender = linGender.Substring(linGender.Length - 1);
-                        if (gender == "M")
-                            entGuestResult.Guest_Gender = "Male";
-                        else if (gender == "F")
-                            entGuestResult.Guest_Gender = "Female";
-                        else if (gender == "X")
-                            entGuestResult.Guest_Gender = "Transgender";                                             
+                        string stri = Regex.Replace(lines[i], "Nationality", "");
+                        string[] splitName = stri.ToString().Split(' ');
+                        splitName = splitName.Where(x => !string.IsNullOrEmpty(x)).ToArray();
+                        string nationality = splitName[0];
+                        if (nationality != null)
+                        {
+                            var query = from c in Global.glbNationalityDT.AsEnumerable()
+                                        where c.Field<string>("zs_nationality") == nationality.ToString()
+                                        select new
+                                        {
+                                            countryID = c.Field<string>("zs_nationalitycode")
+                                        };
+
+
+                            foreach (var m in query)
+                            {
+                                entGuestResult.Guest_Nationality = m.countryID;
+                                entGuestResult.Guest_Country = m.countryID;
+                            }
+                        }
                     }
+
+                    
                 }               
             }
             catch
